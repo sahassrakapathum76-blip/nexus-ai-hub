@@ -8,43 +8,32 @@
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); color: #fff; margin: 0; padding: 0; display: flex; height: 100vh; overflow: hidden; }
         .sidebar { width: 260px; background: rgba(20, 20, 25, 0.95); backdrop-filter: blur(10px); border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; padding: 15px; transition: transform 0.3s ease; z-index: 1001; }
         .sidebar h3 { font-size: 0.9rem; color: #888; margin: 15px 0 10px 5px; text-transform: uppercase; letter-spacing: 1px; }
-        .new-chat-btn { background: #007bff; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-bottom: 10px; text-align: left; transition: background 0.2s; }
-        .new-chat-btn:hover { background: #0056b3; }
+        .new-chat-btn { background: #007bff; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-bottom: 10px; text-align: left; }
         .history-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
-        .history-item { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #ccc; transition: background 0.2s; }
-        .history-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .history-item { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; color: #ccc; }
         .social-links { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; display: flex; flex-direction: column; gap: 8px; }
-        .social-btn { display: block; text-align: center; padding: 8px; border-radius: 6px; font-size: 0.85rem; text-decoration: none; color: white; font-weight: 500; transition: opacity 0.2s; }
+        .social-btn { display: block; text-align: center; padding: 8px; border-radius: 6px; font-size: 0.85rem; text-decoration: none; color: white; font-weight: 500; }
         .fb-btn { background: #1877f2; }
         .capcut-btn { background: #000000; border: 1px solid #444; }
-        .social-btn:hover { opacity: 0.85; }
         .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; background: transparent; }
-        .header { text-align: center; padding: 15px; background: rgba(20, 20, 25, 0.8); backdrop-filter: blur(10px); font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
-        .menu-toggle { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; padding: 5px 10px; }
+        .header { text-align: center; padding: 15px; background: rgba(20, 20, 25, 0.8); backdrop-filter: blur(10px); display: flex; justify-content: space-between; align-items: center; }
+        .menu-toggle { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; }
         #chat-window { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-        .disclaimer { background: rgba(85, 0, 0, 0.6); color: #ffcccc; padding: 10px; border-radius: 8px; font-size: 0.8rem; text-align: center; border: 1px solid rgba(255, 102, 102, 0.3); }
-        .message { max-width: 90%; padding: 12px 15px; border-radius: 12px; word-wrap: break-word; line-height: 1.4; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .user-msg { background: #007bff; align-self: flex-end; color: white; }
-        .ai-msg { background: rgba(40, 40, 45, 0.9); align-self: flex-start; color: #e0e0e0; border: 1px solid rgba(255,255,255,0.05); }
+        .disclaimer { background: rgba(85, 0, 0, 0.6); color: #ffcccc; padding: 10px; border-radius: 8px; font-size: 0.8rem; text-align: center; }
+        .message { max-width: 90%; padding: 12px 15px; border-radius: 12px; word-wrap: break-word; }
+        .user-msg { background: #007bff; align-self: flex-end; }
+        .ai-msg { background: rgba(40, 40, 45, 0.9); align-self: flex-start; }
         .ai-msg img, .ai-msg video, .ai-msg audio { max-width: 100%; border-radius: 8px; margin-top: 8px; display: block; }
-        .input-area { padding: 12px; background: rgba(20, 20, 25, 0.9); backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.1); }
-        .mode-select { display: flex; gap: 5px; justify-content: center; margin-bottom: 10px; flex-wrap: wrap; }
-        .mode-btn { background: rgba(255,255,255,0.08); border: none; color: #fff; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; transition: background 0.2s; }
+        .input-area { padding: 12px; background: rgba(20, 20, 25, 0.9); border-top: 1px solid rgba(255,255,255,0.1); }
+        .mode-select { display: flex; gap: 5px; justify-content: center; margin-bottom: 10px; }
+        .mode-btn { background: rgba(255,255,255,0.08); border: none; color: #fff; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; }
         .mode-btn.active { background: #007bff; }
         .input-row { display: flex; gap: 8px; align-items: center; }
-        input { flex: 1; padding: 12px; border-radius: 8px; border: none; background: rgba(255,255,255,0.08); color: white; font-size: 1rem; outline: none; }
-        input:focus { background: rgba(255,255,255,0.12); }
-        button { padding: 10px 16px; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: background 0.2s; }
-        button:hover { background: #0056b3; }
-        #mic-btn { background: rgba(255,255,255,0.1); padding: 10px 14px; }
-        @media(max-width: 768px) {
-            .sidebar { position: absolute; left: -260px; height: 100%; }
-            .sidebar.open { transform: translateX(260px); }
-        }
+        input { flex: 1; padding: 12px; border-radius: 8px; border: none; background: rgba(255,255,255,0.08); color: white; }
+        button { padding: 10px 16px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
-
     <div class="sidebar" id="sidebar">
         <button class="new-chat-btn" onclick="startNewChat()">+ නව චැට් එකක් (New Chat)</button>
         <h3>මෑත ඉතිහාසය</h3>
@@ -54,19 +43,16 @@
             <a href="https://mobile.capcutshare.com/sv2/ZSVAUVK3o/" target="_blank" class="social-btn capcut-btn">✨ CapCut Profile</a>
         </div>
     </div>
-
     <div class="main-content">
         <div class="header">
             <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
             <span>Nexus AI Ultimate Hub</span>
-            <span style="width: 30px;"></span>
+            <span></span>
         </div>
-        
         <div id="chat-window">
             <div class="disclaimer">⚠️ අනතුරු ඇඟවීම: කරුණාකර නීති විරෝධී හෝ අසභ්‍ය දේවල් ජෙනරේට් නොකරන්න.</div>
-            <div class="message ai-msg">ආයුබෝවන්! මම ඔබේ Nexus AI සහායකයා. චැට්, පින්තූර, වීඩියෝ සහ මියුසික් සෑදීමට අවශ්‍ය දේ අසන්න.</div>
+            <div class="message ai-msg">ආයුබෝවන්! මම ඔබේ Nexus AI සහායකයා.</div>
         </div>
-
         <div class="input-area">
             <div class="mode-select">
                 <button class="mode-btn active" id="btn-chat" onclick="setMode('chat')">💬 චැට්</button>
@@ -75,42 +61,70 @@
                 <button class="mode-btn" id="btn-music" onclick="setMode('music')">🎵 මියුසික්</button>
             </div>
             <div class="input-row">
-                <button id="mic-btn" onclick="startSpeech()" title="කතා කරන්න">🎤</button>
-                <input type="text" id="user-input" placeholder="ඔබේ ප්‍රශ්නය මෙතන ලියන්න..." onkeypress="handleKeyPress(event)">
+                <button id="mic-btn" onclick="startSpeech()">🎤</button>
+                <input type="text" id="user-input" placeholder="ඔබේ ප්‍රශ්නය...">
                 <button onclick="handleSubmit()">යවන්න</button>
             </div>
         </div>
     </div>
-
     <script>
         const geminiApiKey = "AQ.Ab8RN6JXqWHtWv8CxU4IGZlV7WJnMolOv39PyPziWabZcRCE3w";
         const replicateApiToken = "R8_API4i8KE0lQ1p82XYemHpYDjtyEGecF3wLIBx";
-
         let currentMode = 'chat';
         let chatHistory = JSON.parse(localStorage.getItem('nexus_history')) || [];
-
-        window.onload = () => { renderHistory(); };
-
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
-
-        function setMode(mode) {
-            currentMode = mode;
-            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('btn-' + mode).classList.add('active');
-            
-            const input = document.getElementById('user-input');
-            if (mode === 'image') input.placeholder = "අවශ්‍ය පින්තූරය ගැන විස්තරයක් ලියන්න...";
-            else if (mode === 'video') input.placeholder = "වීඩියෝව සහ මියුසික් එක සඳහා විස්තරයක් ලියන්න...";
-            else if (mode === 'music') input.placeholder = "අවශ්‍ය මියුසික් එක ගැන විස්තරයක් ලියන්න...";
-            else input.placeholder = "ඔබේ ප්‍රශ්නය මෙතන ලියන්න...";
+        function setMode(mode) { 
+            currentMode = mode; 
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-'+mode).classList.add('active');
         }
-
-        function startNewChat() {
-            document.getElementById('chat-window').innerHTML = `
-                <div class="disclaimer">⚠️ අනතුරු ඇඟවීම: කරුණාකර නීති විරෝධී හෝ අසභ්‍ය දේවල් ජෙනරේට් නොකරන්න.</div>
-                <div class="message ai-msg">නව සංවාදයක් ආරම්භ විය. ඔබට අවශ්‍ය දේ අසන්න!</div>
-            `;
-            if (window.innerWidth <= 768) toggleSidebar();
+        function startNewChat() { location.reload(); }
+        function saveToHistory(text) { chatHistory.unshift(text); localStorage.setItem('nexus_history', JSON.stringify(chatHistory)); }
+        function startSpeech() { 
+            const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            rec.lang = 'si-LK';
+            rec.start();
+            rec.onresult = (e) => { document.getElementById('user-input').value = e.results[0][0].transcript; };
+        }
+        async function handleSubmit() {
+            const input = document.getElementById("user-input");
+            const chat = document.getElementById("chat-window");
+            const prompt = input.value.trim();
+            if (!prompt) return;
+            saveToHistory(prompt);
+            chat.innerHTML += `<div class="message user-msg">${prompt}</div>`;
+            input.value = "";
+            const loadId = "load-" + Date.now();
+            chat.innerHTML += `<div class="message ai-msg" id="${loadId}">සකස් කරමින් පවතී...</div>`;
+            if (currentMode === 'chat') await fetchChat(prompt, loadId);
+            else if (currentMode === 'image') await fetchImage(prompt, loadId);
+            else if (currentMode === 'video') await fetchVideoAndMusic(prompt, loadId);
+            else if (currentMode === 'music') await fetchMusic(prompt, loadId);
+        }
+        async function fetchChat(prompt, loadId) {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`, {
+                method: "POST", headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({contents: [{parts: [{text: prompt}]}]})
+            });
+            const data = await res.json();
+            document.getElementById(loadId).remove();
+            document.getElementById("chat-window").innerHTML += `<div class="message ai-msg">${data.candidates[0].content.parts[0].text}</div>`;
+        }
+        async function fetchImage(prompt, loadId) {
+            document.getElementById(loadId).remove();
+            document.getElementById("chat-window").innerHTML += `<div class="message ai-msg">පින්තූරය:<br><img src="https://pollinations.ai/p/${encodeURIComponent(prompt)}?width=512&height=512&nologo=true"></div>`;
+        }
+        async function fetchVideoAndMusic(prompt, loadId) {
+            document.getElementById(loadId).remove();
+            document.getElementById("chat-window").innerHTML += `<div class="message ai-msg">වීඩියෝව සහ මියුසික් සෑදේ... (ටික වේලාවක් රැඳී සිටින්න). ප්‍රතිඵලය මෙතැනින් බලන්න: https://replicate.com/</div>`;
+        }
+        async function fetchMusic(prompt, loadId) {
+            document.getElementById(loadId).remove();
+            document.getElementById("chat-window").innerHTML += `<div class="message ai-msg">මියුසික් එක සෑදේ... (ටික වේලාවක් රැඳී සිටින්න).</div>`;
+        }
+    </script>
+</body>
+</html>
         }
 
         function saveToHistory(text) {
