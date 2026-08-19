@@ -4,45 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nexus AI Ultimate Hub</title>
-    <link rel="manifest" href="manifest.json">
     <style>
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #121212; color: #fff; margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; }
         .header { text-align: center; padding: 15px; background: #1f1f1f; font-weight: bold; border-bottom: 1px solid #333; }
         #chat-window { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .disclaimer { background: #550000; color: #ffcccc; padding: 10px; border-radius: 8px; font-size: 0.8rem; text-align: center; margin-bottom: 10px; border: 1px solid #ff6666; }
         .message { max-width: 90%; padding: 12px; border-radius: 12px; word-wrap: break-word; line-height: 1.4; }
         .user-msg { background: #007bff; align-self: flex-end; color: white; }
         .ai-msg { background: #2a2a2a; align-self: flex-start; color: #e0e0e0; }
-        .ai-msg img, .ai-msg video { max-width: 100%; border-radius: 8px; margin-top: 8px; }
+        .ai-msg img, .ai-msg video, .ai-msg audio { max-width: 100%; border-radius: 8px; margin-top: 8px; display: block; }
         .input-area { padding: 10px; background: #1f1f1f; border-top: 1px solid #333; }
-        .mode-select { display: flex; gap: 5px; justify-content: center; margin-bottom: 10px; }
+        .mode-select { display: flex; gap: 5px; justify-content: center; margin-bottom: 10px; flex-wrap: wrap; }
         .mode-btn { background: #333; border: none; color: #fff; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 0.85rem; }
         .mode-btn.active { background: #007bff; }
-        .input-row { display: flex; gap: 5px; }
+        .input-row { display: flex; gap: 5px; align-items: center; }
         input { flex: 1; padding: 12px; border-radius: 8px; border: none; background: #2a2a2a; color: white; font-size: 1rem; outline: none; }
-        button { padding: 0 15px; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
+        button { padding: 10px 15px; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
+        #mic-btn { background: #444; padding: 10px 12px; }
     </style>
 </head>
 <body>
     <div class="header">Nexus AI Ultimate Hub</div>
     
     <div id="chat-window">
-        <div class="message ai-msg">ආයුබෝවන්! මම ඔබේ Nexus AI සහායකයා. ඔබට අවශ්‍ය පරිදි චැට් කිරීමට, පින්තූර සෑදීමට හෝ වීඩියෝ ජෙනරේට් කර ගැනීමට හැකියාව ඇත.</div>
+        <div class="disclaimer">⚠️ අනතුරු ඇඟවීම: කරුණාකර නීති විරෝධී, අසභ්‍ය හෝ අන් අයට හානි කරන දේවල් ජෙනරේට් නොකරන්න.</div>
+        <div class="message ai-msg">ආයුබෝවන්! මම ඔබේ Nexus AI සහායකයා. දැන් වීඩියෝ මෝඩ් එකෙන් එකම ප්‍රොම්ට් එකකින් වීඩියෝවයි මියුසික් එකයි දෙකම ලබාගත හැක.</div>
     </div>
 
     <div class="input-area">
         <div class="mode-select">
             <button class="mode-btn active" id="btn-chat" onclick="setMode('chat')">💬 චැට්</button>
             <button class="mode-btn" id="btn-image" onclick="setMode('image')">🖼️ පින්තූර</button>
-            <button class="mode-btn" id="btn-video" onclick="setMode('video')">🎬 වීඩියෝ</button>
+            <button class="mode-btn" id="btn-video" onclick="setMode('video')">🎬 වීඩියෝ + මියුසික්</button>
+            <button class="mode-btn" id="btn-music" onclick="setMode('music')">🎵 මියුසික් පමණක්</button>
         </div>
         <div class="input-row">
+            <button id="mic-btn" onclick="startSpeech()" title="කතා කරලා ටයිප් කරන්න">🎤</button>
             <input type="text" id="user-input" placeholder="ඔබේ ප්‍රශ්නය මෙතන ලියන්න..." onkeypress="handleKeyPress(event)">
             <button onclick="handleSubmit()">යවන්න</button>
         </div>
     </div>
 
     <script>
-        // API Keys සටහන් කර ඇත
         const geminiApiKey = "AQ.Ab8RN6JXqWHtWv8CxU4IGZlV7WJnMolOv39PyPziWabZcRCE3w";
         const replicateApiToken = "R8_API4i8KE0lQ1p82XYemHpYDjtyEGecF3wLIBx";
 
@@ -55,8 +58,27 @@
             
             const input = document.getElementById('user-input');
             if (mode === 'image') input.placeholder = "අවශ්‍ය පින්තූරය ගැන විස්තරයක් ලියන්න...";
-            else if (mode === 'video') input.placeholder = "අවශ්‍ය වීඩියෝව ගැන විස්තරයක් ලියන්න...";
+            else if (mode === 'video') input.placeholder = "වීඩියෝව සහ මියුසික් එක සඳහා විස්තරයක් ලියන්න...";
+            else if (mode === 'music') input.placeholder = "අවශ්‍ය මියුසික් එක ගැන විස්තරයක් ලියන්න...";
             else input.placeholder = "ඔබේ ප්‍රශ්නය මෙතන ලියන්න...";
+        }
+
+        function startSpeech() {
+            try {
+                const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                recognition.lang = 'si-LK';
+                document.getElementById('user-input').placeholder = "කතා කරන්න...";
+                recognition.start();
+                
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById('user-input').value = transcript;
+                    setMode(currentMode);
+                };
+                recognition.onerror = () => { setMode(currentMode); };
+            } catch (e) {
+                alert("ඔබේ බ්‍රව්සර් එක මයික්‍රොෆෝන් පහසුකම සඳහා සහය නොදක්වයි.");
+            }
         }
 
         async function handleSubmit() {
@@ -75,7 +97,8 @@
 
             if (currentMode === 'chat') await fetchChat(prompt, loadId);
             else if (currentMode === 'image') await fetchImage(prompt, loadId);
-            else await fetchVideo(prompt, loadId);
+            else if (currentMode === 'video') await fetchVideoAndMusic(prompt, loadId);
+            else if (currentMode === 'music') await fetchMusic(prompt, loadId);
         }
 
         async function fetchChat(prompt, loadId) {
@@ -106,10 +129,92 @@
             document.getElementById("chat-window").scrollTop = document.getElementById("chat-window").scrollHeight;
         }
 
-        async function fetchVideo(prompt, loadId) {
+        // වීඩියෝව සහ මියුසික් එක එකම ප්‍රොම්ට් එකෙන් එකවර ජෙනරේට් කිරීම
+        async function fetchVideoAndMusic(prompt, loadId) {
             const chat = document.getElementById("chat-window");
             try {
-                // Replicate API හරහා වීඩියෝ සෑදීමට ඉල්ලීම යැවීම (Stable Video Diffusion හෝ AnimateDiff වැනි මොඩල් එකක් සඳහා)
+                // 1. වීඩියෝ ඉල්ලීම යැවීම
+                const videoRes = await fetch("https://api.replicate.com/v1/predictions", {
+                    method: "POST", 
+                    headers: { "Authorization": `Bearer ${replicateApiToken}`, "Content-Type": "application/json", "Prefer": "wait" },
+                    body: JSON.stringify({ 
+                        version: "9f747673945c62801b13b84701c743929c819125132e4d2a7a274ab2cb46d16f", 
+                        input: { prompt: prompt } 
+                    })
+                });
+                const videoData = await videoRes.json();
+
+                // 2. මියුසික් ඉල්ලීම එකවරම යැවීම
+                const musicRes = await fetch("https://api.replicate.com/v1/predictions", {
+                    method: "POST",
+                    headers: { "Authorization": `Bearer ${replicateApiToken}`, "Content-Type": "application/json", "Prefer": "wait" },
+                    body: JSON.stringify({ 
+                        version: "7a1516e04d365dff0d645305a417578278272b9a3838634833215284a1a46272", 
+                        input: { prompt_a: prompt } 
+                    })
+                });
+                const musicData = await musicRes.json();
+
+                document.getElementById(loadId).remove();
+
+                let resultHtml = `<div class="message ai-msg"><b>🎬 ඔබේ වීඩියෝව සහ 🎵 මියුසික් එක සූදානම්:</b>`;
+                if (videoData.output) {
+                    resultHtml += `<br>වීඩියෝව:<br><video controls src="${videoData.output}" style="width:100%; border-radius:8px;"></video>`;
+                } else {
+                    resultHtml += `<br>වීඩියෝව සකස් කිරීමේදී දෝෂයක් විය.`;
+                }
+
+                if (musicData.output) {
+                    resultHtml += `<br>මියුසික් එක:<br><audio controls src="${musicData.output}" style="width:100%; margin-top:8px;"></audio>`;
+                } else {
+                    resultHtml += `<br>මියුසික් එක සකස් කිරීමේදී දෝෂයක් විය.`;
+                }
+                resultHtml += `</div>`;
+
+                chat.innerHTML += resultHtml;
+            } catch (e) {
+                document.getElementById(loadId).remove();
+                chat.innerHTML += `<div class="message ai-msg">මෙහෙයුම ක්‍රියාත්මක කිරීමේදී දෝෂයක් සිදු විය.</div>`;
+            }
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        async function fetchMusic(prompt, loadId) {
+            const chat = document.getElementById("chat-window");
+            try {
+                const response = await fetch("https://api.replicate.com/v1/predictions", {
+                    method: "POST",
+                    headers: { "Authorization": `Bearer ${replicateApiToken}`, "Content-Type": "application/json", "Prefer": "wait" },
+                    body: JSON.stringify({ 
+                        version: "7a1516e04d365dff0d645305a417578278272b9a3838634833215284a1a46272", 
+                        input: { prompt_a: prompt } 
+                    })
+                });
+                const data = await response.json();
+                document.getElementById(loadId).remove();
+
+                if (data.output) {
+                    chat.innerHTML += `<div class="message ai-msg"><b>🎵 ඔබේ මියුසික් එක සූදානම්:</b><br><audio controls src="${data.output}" style="width:100%; margin-top:8px;"></audio></div>`;
+                } else {
+                    chat.innerHTML += `<div class="message ai-msg">මියුසික් සැකසීමේදී දෝෂයක් සිදු විය.</div>`;
+                }
+            } catch (e) {
+                document.getElementById(loadId).remove();
+                chat.innerHTML += `<div class="message ai-msg">මියුසික් ඉල්ලීම ක්‍රියාත්මක කිරීමේදී දෝෂයක් සිදු විය.</div>`;
+            }
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") handleSubmit();
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+    </script>
+</body>
+</html>
                 const response = await fetch("https://api.replicate.com/v1/predictions", {
                     method: "POST", 
                     headers: { 
