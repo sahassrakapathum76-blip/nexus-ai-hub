@@ -5,14 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nexus AI Hub</title>
     <style>
-        /* මෙතනින් තමයි ඩිසයින් එක ලස්සන කරන්නේ */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             display: flex; flex-direction: column; height: 100vh; margin: 0; 
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
         }
         .header { text-align: center; padding: 20px; color: white; font-size: 24px; font-weight: bold; }
-        #chat-window { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; }
+        #chat-window { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .message { padding: 12px 18px; border-radius: 15px; max-width: 75%; line-height: 1.5; font-size: 15px; }
+        .user-msg { background: white; align-self: flex-end; color: #333; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .ai-msg { background: rgba(255, 255, 255, 0.9); align-self: flex-start; color: #333; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .input-area { background: white; padding: 15px; display: flex; gap: 10px; align-items: center; border-radius: 50px; margin: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         input { flex: 1; padding: 15px; border: none; outline: none; font-size: 16px; }
         button { border: none; background: none; cursor: pointer; font-size: 24px; }
@@ -22,11 +24,13 @@
 <body>
 
     <div class="header">Nexus AI Hub 🤖</div>
-    <div id="chat-window"></div>
+    <div id="chat-window">
+        <div class="message ai-msg">ආයුබෝවන්! මම සූදානම්. මගෙන් ඕනෑම ප්‍රශ්නයක් අසන්න.</div>
+    </div>
     
     <div class="input-area">
         <button id="micBtn">🎤</button>
-        <input type="text" id="userInput" placeholder="ප්‍රශ්නයක් අහන්න...">
+        <input type="text" id="userInput" placeholder="ප්‍රශ්නයක් අහන්න..." onkeypress="handleKeyPress(event)">
         <button class="send-btn" onclick="sendMessage()">🚀</button>
     </div>
 
@@ -37,7 +41,7 @@
         
         micBtn.onclick = () => { 
             recognition.start(); 
-            micBtn.style.color = "red"; // මයික් එක වැඩ කරනකොට රතු පාට වෙනවා
+            micBtn.style.color = "red"; 
         };
         
         recognition.onresult = (event) => {
@@ -45,12 +49,39 @@
             micBtn.style.color = "black";
         };
 
-        function sendMessage() {
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        async function sendMessage() {
             const input = document.getElementById('userInput');
             const chat = document.getElementById('chat-window');
-            if(input.value) {
-                chat.innerHTML += `<div style="background:white; padding:10px; border-radius:15px; margin:5px; align-self:flex-end;">${input.value}</div>`;
-                input.value = '';
+            const userText = input.value.trim();
+            
+            if(!userText) return;
+
+            // ඔයාගේ මැසේජ් එක චැට් එකට එකතු කිරීම
+            chat.innerHTML += `<div class="message user-msg">${userText}</div>`;
+            input.value = '';
+            chat.scrollTop = chat.scrollHeight;
+
+            // AI එකෙන් උත්තර ලබා ගැනීම (මෙතැනදී අපි තාවකාලිකව ලෝඩින් මැසේජ් එකක් පෙන්වමු)
+            const loadingId = 'loading-' + Date.now();
+            chat.innerHTML += `<div id="${loadingId}" class="message ai-msg">කල්පනා කරමින් පවතී... ⏳</div>`;
+            chat.scrollTop = chat.scrollHeight;
+
+            try {
+                // සටහන: සම්පූර්ණ API සම්බන්ධතාවය සඳහා backend එකක් හරහා හෝ Direct API key එකක් අවශ්‍ය වේ. 
+                // දැනට අපි සයිට් එකේ ඩිසයින් එක සහ මයික් එක ක්‍රියාත්මක කර ඇත.
+                setTimeout(() => {
+                    document.getElementById(loadingId).innerText = "ස්තුතියි! ඔබගේ ප්‍රශ්නය ලැබුණි: " + userText;
+                    chat.scrollTop = chat.scrollHeight;
+                }, 1000);
+
+            } catch (error) {
+                document.getElementById(loadingId).innerText = "සමාවෙන්න, දෝෂයක් සිදු විය.";
             }
         }
     </script>
