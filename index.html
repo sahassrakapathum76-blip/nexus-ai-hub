@@ -11,86 +11,65 @@
         .message { padding: 12px 18px; border-radius: 15px; max-width: 80%; line-height: 1.5; font-size: 15px; word-wrap: break-word; }
         .user-msg { background: white; align-self: flex-end; color: #333; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .ai-msg { background: rgba(255, 255, 255, 0.95); align-self: flex-start; color: #333; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .preview-container { padding: 5px 20px; display: none; align-items: center; gap: 10px; background: rgba(255,255,255,0.2); }
-        .preview-container img { height: 50px; border-radius: 5px; }
         .input-area { background: white; padding: 12px 15px; display: flex; gap: 10px; align-items: center; border-radius: 50px; margin: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         input[type="text"] { flex: 1; padding: 10px; border: none; outline: none; font-size: 16px; }
-        input[type="file"] { display: none; }
-        .file-btn { cursor: pointer; font-size: 22px; }
         button { border: none; background: none; cursor: pointer; font-size: 24px; }
         .send-btn { color: #764ba2; }
     </style>
 </head>
 <body>
     <div class="header">Nexus AI Hub 🤖</div>
-    <div id="chat-window"><div class="message ai-msg">ආයුබෝවන්! මම සූදානම්. ෆොටෝ එකක් හෝ ප්‍රශ්නයක් මට දෙන්න.</div></div>
-    <div class="preview-container" id="previewBox"><img id="imagePreview" src=""><span id="fileName"></span><span onclick="clearImage()" style="color: red; cursor: pointer; margin-left: auto;">✖</span></div>
+    <div id="chat-window"><div class="message ai-msg">ආයුබෝවන්! මම සූදානම්. ඕනෑම ප්‍රශ්නයක් මගෙන් අසන්න.</div></div>
+    
     <div class="input-area">
-        <label for="imageInput" class="file-btn">📎</label>
-        <input type="file" id="imageInput" accept="image/*" onchange="previewFile()">
-        <button id="micBtn">🎤</button>
         <input type="text" id="userInput" placeholder="ප්‍රශ්නයක් අහන්න..." onkeypress="handleKeyPress(event)">
         <button class="send-btn" onclick="sendMessage()">🚀</button>
     </div>
+
     <script>
-        // ඔයාගේ API Key එක මෙතැනට දමා ඇත
         const API_KEY = 'AQ.Ab8RN6Kp3yrs0PvYreMWc65m634_f_tA0vYzOxrKSIkI3B9h4Q'; 
 
-        let selectedFileBase64 = null;
-        let selectedFileMime = null;
-        const micBtn = document.getElementById('micBtn');
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'si-LK'; 
-        micBtn.onclick = () => { recognition.start(); micBtn.style.color = "red"; };
-        recognition.onresult = (event) => { document.getElementById('userInput').value = event.results[0][0].transcript; micBtn.style.color = "black"; };
-
-        function previewFile() {
-            const file = document.getElementById('imageInput').files[0];
-            if (file) {
-                selectedFileMime = file.type;
-                const reader = new FileReader();
-                reader.onload = (e) => { document.getElementById('imagePreview').src = e.target.result; selectedFileBase64 = e.target.result.split(',')[1]; document.getElementById('previewBox').style.display = 'flex'; }
-                reader.readAsDataURL(file);
-            }
-        }
-        function clearImage() { selectedFileBase64 = null; document.getElementById('imageInput').value = ''; document.getElementById('previewBox').style.display = 'none'; }
         async function sendMessage() {
             const input = document.getElementById('userInput');
             const chat = document.getElementById('chat-window');
             const userText = input.value.trim();
-            if(!userText && !selectedFileBase64) return;
+            if(!userText) return;
 
-            let displayHtml = userText;
-            if(selectedFileBase64) {
-                displayHtml = `<img src="data:${selectedFileMime};base64,${selectedFileBase64}" style="max-width:150px; border-radius:10px; display:block; margin-bottom:5px;">` + userText;
-            }
-
-            chat.innerHTML += `<div class="message user-msg">${displayHtml}</div>`;
+            chat.innerHTML += `<div class="message user-msg">${userText}</div>`;
             input.value = '';
+            
             const loadingId = 'loading-' + Date.now();
             chat.innerHTML += `<div id="${loadingId}" class="message ai-msg">කල්පනා කරමින් පවතී...</div>`;
-            
+            chat.scrollTop = chat.scrollHeight;
+
             try {
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
-                let parts = [];
-                if (selectedFileBase64) parts.push({ inline_data: { mime_type: selectedFileMime, data: selectedFileBase64 } });
-                parts.push({ text: userText || "මෙය විස්තර කරන්න." });
                 
-                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: parts }] }) });
+                const response = await fetch(url, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ 
+                        contents: [{ parts: [{ text: userText }] }] 
+                    }) 
+                });
+
                 const data = await response.json();
                 
-                if (data.candidates && data.candidates[0].content) {
-                    document.getElementById(loadingId).innerHTML = data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>');
+                if (data.candidates && data.candidates.length > 0) {
+                    const aiReply = data.candidates[0].content.parts[0].text;
+                    document.getElementById(loadingId).innerHTML = aiReply.replace(/\n/g, '<br>');
                 } else {
-                    document.getElementById(loadingId).innerText = "සමාවෙන්න, මට පිළිතුරක් ලබා දීමට නොහැකි විය.";
+                    document.getElementById(loadingId).innerText = "සමාවෙන්න, මට පිළිතුරක් ලබා දීමට නොහැකි විය. (API සීමාවකි)";
                 }
             } catch (e) { 
-                document.getElementById(loadingId).innerText = "දෝෂයක් සිදු විය."; 
+                document.getElementById(loadingId).innerText = "සන්නිවේදන දෝෂයක් සිදු විය."; 
             }
-            clearImage(); 
             chat.scrollTop = chat.scrollHeight;
         }
-        function handleKeyPress(event) { if (event.key === 'Enter') sendMessage(); }
+
+        function handleKeyPress(event) { 
+            if (event.key === 'Enter') sendMessage(); 
+        }
     </script>
 </body>
 </html>
