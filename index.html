@@ -875,9 +875,9 @@ button{
 
             <div class="model-wrap">
                 <select id="modelSelect" class="model-select">
-                    <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+                    <option value="gemini-3.6-flash">Gemini 3.6 Flash</option>
+                    <option value="gemini-3.5-flash">Gemini 3.5 Flash</option>
                     <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
-                    <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
                 </select>
             </div>
 
@@ -1126,14 +1126,9 @@ function saveChats(){
 
 function getSettings(){
     try{
-        const saved = JSON.parse(localStorage.getItem(STORAGE.SETTINGS) || "{}");
         return {
             ...DEFAULT_SETTINGS,
-            ...saved,
-            geminiKey: saved.geminiKey ? saved.geminiKey.trim() : "",
-            replicateKey: saved.replicateKey ? saved.replicateKey.trim() : "",
-            videoModel: saved.videoModel ? saved.videoModel.trim() : DEFAULT_SETTINGS.videoModel,
-            musicModel: saved.musicModel ? saved.musicModel.trim() : DEFAULT_SETTINGS.musicModel
+            ...JSON.parse(localStorage.getItem(STORAGE.SETTINGS) || "{}")
         };
     }catch{
         return {...DEFAULT_SETTINGS};
@@ -1188,8 +1183,8 @@ function loadStorage(){
     let savedModel =
         localStorage.getItem(STORAGE.MODEL);
 
-    if(!savedModel || savedModel.includes("2.5") || savedModel.includes("1.5")){
-        savedModel = "gemini-2.5-flash";
+    if(!savedModel || savedModel.includes("2.5") || savedModel.includes("1.5") && savedModel !== "gemini-1.5-flash"){
+        savedModel = "gemini-3.6-flash";
         localStorage.setItem(STORAGE.MODEL, savedModel);
     }
 
@@ -1255,14 +1250,6 @@ function updateChat(){
 /* =========================================================
    HISTORY
 ========================================================= */
-
-function loadChat(id, closeMob = true){
-    currentChatId = id;
-    localStorage.setItem(STORAGE.CURRENT, currentChatId);
-    renderHistory();
-    renderCurrentChat();
-    if(closeMob) closeSidebar();
-}
 
 function renderHistory(){
 
@@ -1553,4 +1540,877 @@ function renderText(text){
     let safe = escapeHTML(text);
 
     safe = safe.replace(
-        /```([\s\S]*?)
+        /```([\s\S]*?)```/g,
+        "<pre>$1</pre>"
+    );
+
+    safe = safe.replace(
+        /`([^`]+)`/g,
+        "<code>$1</code>"
+    );
+
+    safe = safe.replace(
+        /\*\*(.*?)\*\*/g,
+        "<strong>$1</strong>"
+    );
+
+    safe = safe.replace(
+        /\n/g,
+        "<br>"
+    );
+
+    return safe;
+}
+
+
+function scrollBottom(){
+
+    requestAnimationFrame(()=>{
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    });
+}
+
+
+/* =========================================================
+   GEMINI
+========================================================= */
+
+async function callGemini(prompt){
+
+    const settings = getSettings();
+
+    if(!settings.geminiKey){
+
+        openSettings();
+
+        throw new Error(
+            "Gemini API Key එක Settings වලට add කරන්න."
+        );
+    }
+
+    const chat = currentChat();
+
+    const contents = chat.messages
+        .filter(m =>
+            m.role === "user" ||
+            m.role === "model"
+        )
+        .map(m=>({
+            role:m.role,
+            parts:[
+                {
+                    text:m.text || ""
+                }
+            ]
+        }));
+
+    const response = await fetch(
+        "https://generativelanguage.googleapis.com/v1beta/models/" +
+        encodeURIComponent(modelSelect.value) +
+        ":generateContent",
+        {
+            method:"POST",
+            signal:abortController.signal,
+            headers:{
+                "Content-Type":"application/json",
+                "x-goog-api-key":settings.geminiKey
+            },
+            body:JSON.stringify({
+                contents,
+                generationConfig:{
+                    maxOutputTokens:2048
+                }
+            })
+        }
+    );
+
+    const data = await response.json();
+
+    if(!response.ok){
+
+        throw new Error(
+            data?.error?.message ||
+            "Gemini API request failed."
+        );
+    }
+
+    const text =
+        data?.candidates?.[0]?.content?.parts
+            ?.map(part=>part.text || "")
+            .join("") ||
+        "";
+
+    if(!text){
+        throw new Error(
+            "Gemini response එක හිස්."
+        );
+    }
+
+    return text;
+}
+
+
+/* =========================================================
+   POLLINATIONS IMAGE
+========================================================= */
+
+async function generateImage(prompt){
+
+    const encoded =
+        encodeURIComponent(prompt);
+
+    const url =
+        "https://image.pollinations.ai/prompt/" +
+        encoded +
+        "?width=1024&height=1024&nologo=true";
+
+    return url;
+}
+
+
+/* =========================================================
+   REPLICATE
+========================================================= */
+
+async function createReplicatePrediction(
+    model,
+    inputData
+){
+
+    const settings = getSettings();
+
+    if(!settings.replicateKey){
+
+        openSettings();
+
+        throw new Error(
+            "Replicate API Token එක Settings වලට add කරන්න."
+        );
+    }
+
+    const response = await fetch(
+        "https://api.replicate.com/v1/predictions",
+        {
+            method:"POST",
+            signal:abortController.signal,
+            headers:{
+                "Authorization":
+                    "Bearer " + settings.replicateKey,
+                "Content-Type":"application/json",
+                "Prefer":"wait=5"
+            },
+            body:JSON.stringify({
+                version:model,
+                input:inputData
+            })
+        }
+    );
+
+    const data = await response.json();
+
+    if(!response.ok){
+
+        throw new Error(
+            data?.detail ||
+            data?.error ||
+            "Replicate API request failed."
+        );
+    }
+
+    return data;
+}
+
+
+async function pollReplicate(url){
+
+    const settings = getSettings();
+
+    for(let i=0;i<60;i++){
+
+        if(abortController.signal.aborted){
+            throw new Error("Generation stopped.");
+        }
+
+        const response = await fetch(
+            url,
+            {
+                signal:abortController.signal,
+                headers:{
+                    "Authorization":
+                        "Bearer " + settings.replicateKey
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if(data.status === "succeeded"){
+            return data;
+        }
+
+        if(
+            data.status === "failed" ||
+            data.status === "canceled"
+        ){
+            throw new Error(
+                data.error ||
+                "Replicate generation failed."
+            );
+        }
+
+        await new Promise(resolve =>
+            setTimeout(resolve,3000)
+        );
+    }
+
+    throw new Error(
+        "Generation timeout."
+    );
+}
+
+
+/* =========================================================
+   VIDEO
+========================================================= */
+
+async function generateVideo(prompt){
+
+    const settings = getSettings();
+
+    let prediction =
+        await createReplicatePrediction(
+            settings.videoModel,
+            {
+                prompt
+            }
+        );
+
+    if(
+        prediction.status === "succeeded"
+    ){
+        return prediction.output;
+    }
+
+    if(prediction.urls?.get){
+
+        prediction =
+            await pollReplicate(
+                prediction.urls.get
+            );
+
+        return prediction.output;
+    }
+
+    throw new Error(
+        "Video output unavailable."
+    );
+}
+
+
+/* =========================================================
+   MUSIC
+========================================================= */
+
+async function generateMusic(prompt){
+
+    const settings = getSettings();
+
+    let prediction =
+        await createReplicatePrediction(
+            settings.musicModel,
+            {
+                prompt
+            }
+        );
+
+    if(
+        prediction.status === "succeeded"
+    ){
+        return prediction.output;
+    }
+
+    if(prediction.urls?.get){
+
+        prediction =
+            await pollReplicate(
+                prediction.urls.get
+            );
+
+        return prediction.output;
+    }
+
+    throw new Error(
+        "Music output unavailable."
+    );
+}
+
+
+/* =========================================================
+   SUBMIT
+========================================================= */
+
+async function handleSubmit(){
+
+    if(isGenerating){
+        stopGeneration();
+        return;
+    }
+
+    const prompt = input.value.trim();
+
+    if(!prompt){
+        return;
+    }
+
+    const chat = currentChat();
+
+    if(!chat){
+        createNewChat();
+        return;
+    }
+
+    if(
+        chat.messages.length === 0 ||
+        chat.title === "නව චැට් එක"
+    ){
+        chat.title =
+            prompt.length > 42
+            ? prompt.slice(0,42) + "..."
+            : prompt;
+    }
+
+    const userMessage = {
+        id:uid(),
+        role:"user",
+        text:prompt,
+        timestamp:Date.now()
+    };
+
+    chat.messages.push(userMessage);
+    chat.updatedAt = Date.now();
+    chat.model = modelSelect.value;
+
+    input.value = "";
+
+    autoResize();
+
+    saveChats();
+    renderHistory();
+    renderCurrentChat();
+
+    setGenerating(true);
+
+    try{
+
+        if(currentMode === "chat"){
+
+            abortController =
+                new AbortController();
+
+            const answer =
+                await callGemini(prompt);
+
+            chat.messages.push({
+                id:uid(),
+                role:"model",
+                text:answer,
+                timestamp:Date.now(),
+                model:modelSelect.value
+            });
+
+        }else if(currentMode === "image"){
+
+            const url =
+                await generateImage(prompt);
+
+            chat.messages.push({
+                id:uid(),
+                role:"model",
+                type:"image",
+                text:"🖼️ Generated Image",
+                url,
+                timestamp:Date.now()
+            });
+
+        }else if(currentMode === "video"){
+
+            addTemporaryMessage(
+                "🎬 වීඩියෝ එක generate කරමින් පවතී..."
+            );
+
+            abortController =
+                new AbortController();
+
+            const output =
+                await generateVideo(prompt);
+
+            removeTemporaryMessage();
+
+            const url =
+                Array.isArray(output)
+                ? output[0]
+                : output;
+
+            chat.messages.push({
+                id:uid(),
+                role:"model",
+                type:"video",
+                text:"🎬 Generated Video",
+                url,
+                timestamp:Date.now()
+            });
+
+        }else if(currentMode === "music"){
+
+            addTemporaryMessage(
+                "🎵 Music එක generate කරමින් පවතී..."
+            );
+
+            abortController =
+                new AbortController();
+
+            const output =
+                await generateMusic(prompt);
+
+            removeTemporaryMessage();
+
+            const url =
+                Array.isArray(output)
+                ? output[0]
+                : output;
+
+            chat.messages.push({
+                id:uid(),
+                role:"model",
+                type:"audio",
+                text:"🎵 Generated Music",
+                url,
+                timestamp:Date.now()
+            });
+        }
+
+        chat.updatedAt = Date.now();
+
+        saveChats();
+        renderHistory();
+        renderCurrentChat();
+
+    }catch(error){
+
+        removeTemporaryMessage();
+
+        if(error.name !== "AbortError"){
+
+            chat.messages.push({
+                id:uid(),
+                role:"model",
+                text:
+                    "❌ Error: " +
+                    (error.message ||
+                    "Unknown error"),
+                timestamp:Date.now()
+            });
+
+            saveChats();
+            renderCurrentChat();
+        }
+
+    }finally{
+
+        abortController = null;
+        setGenerating(false);
+    }
+}
+
+
+/* =========================================================
+   TEMP MESSAGE
+========================================================= */
+
+function addTemporaryMessage(text){
+
+    removeTemporaryMessage();
+
+    const row = document.createElement("div");
+
+    row.className =
+        "message-row ai temporary-message";
+
+    row.innerHTML = `
+        <div class="avatar">✦</div>
+        <div class="message">
+            <div class="typing">
+                <span>${escapeHTML(text)}</span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+    `;
+
+    chatContainer.appendChild(row);
+
+    scrollBottom();
+}
+
+
+function removeTemporaryMessage(){
+
+    const element =
+        chatContainer.querySelector(
+            ".temporary-message"
+        );
+
+    if(element){
+        element.remove();
+    }
+}
+
+
+/* =========================================================
+   GENERATION STATE
+========================================================= */
+
+function setGenerating(state){
+
+    isGenerating = state;
+
+    if(state){
+
+        sendBtn.textContent = "■";
+        sendBtn.title = "Stop";
+
+        sendBtn.disabled = false;
+
+    }else{
+
+        sendBtn.textContent = "➤";
+        sendBtn.title = "Send";
+
+    }
+}
+
+
+function stopGeneration(){
+
+    if(abortController){
+        abortController.abort();
+    }
+
+    setGenerating(false);
+
+    toastMessage("Generation stopped.");
+}
+
+
+/* =========================================================
+   MODE
+========================================================= */
+
+document
+    .querySelectorAll(".mode")
+    .forEach(button=>{
+
+        button.addEventListener("click",()=>{
+
+            document
+                .querySelectorAll(".mode")
+                .forEach(btn =>
+                    btn.classList.remove("active")
+                );
+
+            button.classList.add("active");
+
+            currentMode =
+                button.dataset.mode;
+
+            updatePlaceholder();
+        });
+    });
+
+
+function updatePlaceholder(){
+
+    const placeholders = {
+        chat:"ඔබට අවශ්‍ය දෙයක් අහන්න...",
+        image:"ඔබට අවශ්‍ය පින්තූරය විස්තර කරන්න...",
+        video:"වීඩියෝ එකේ scene එක විස්තර කරන්න...",
+        music:"ඔබට අවශ්‍ය music එක විස්තර කරන්න..."
+    };
+
+    input.placeholder =
+        placeholders[currentMode];
+}
+
+
+/* =========================================================
+   SPEECH TO TEXT
+========================================================= */
+
+let recognition = null;
+
+function startSpeech(){
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    if(!SpeechRecognition){
+
+        toastMessage(
+            "මෙම browser එක Speech Recognition support කරන්නේ නැහැ."
+        );
+
+        return;
+    }
+
+    recognition =
+        new SpeechRecognition();
+
+    recognition.lang = "si-LK";
+    recognition.interimResults = true;
+    recognition.continuous = false;
+
+    recognition.onstart = ()=>{
+        $("micBtn").textContent = "🔴";
+    };
+
+    recognition.onresult = event=>{
+
+        let text = "";
+
+        for(
+            let i=0;
+            i<event.results.length;
+            i++
+        ){
+            text +=
+                event.results[i][0].transcript;
+        }
+
+        input.value = text;
+        autoResize();
+    };
+
+    recognition.onerror = ()=>{
+        toastMessage(
+            "Voice input එක ලබාගන්න බැරි වුණා."
+        );
+    };
+
+    recognition.onend = ()=>{
+        $("micBtn").textContent = "🎤";
+    };
+
+    recognition.start();
+}
+
+
+/* =========================================================
+   AUTO RESIZE
+========================================================= */
+
+function autoResize(){
+
+    input.style.height = "auto";
+
+    input.style.height =
+        Math.min(input.scrollHeight,150) +
+        "px";
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+function openSidebar(){
+
+    sidebar.classList.add("open");
+    overlay.classList.add("show");
+}
+
+function closeSidebar(){
+
+    sidebar.classList.remove("open");
+    overlay.classList.remove("show");
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+function openSettings(){
+
+    const settings = getSettings();
+
+    geminiKeyInput.value =
+        settings.geminiKey || "";
+
+    replicateKeyInput.value =
+        settings.replicateKey || "";
+
+    videoModelInput.value =
+        settings.videoModel ||
+        DEFAULT_SETTINGS.videoModel;
+
+    musicModelInput.value =
+        settings.musicModel ||
+        DEFAULT_SETTINGS.musicModel;
+
+    settingsModal.classList.add("show");
+}
+
+function closeSettings(){
+
+    settingsModal.classList.remove("show");
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+$("newChatBtn").addEventListener(
+    "click",
+    ()=>createNewChat()
+);
+
+$("newTopBtn").addEventListener(
+    "click",
+    ()=>createNewChat()
+);
+
+$("menuBtn").addEventListener(
+    "click",
+    openSidebar
+);
+
+overlay.addEventListener(
+    "click",
+    closeSidebar
+);
+
+$("settingsBtn").addEventListener(
+    "click",
+    openSettings
+);
+
+$("settingsTopBtn").addEventListener(
+    "click",
+    openSettings
+);
+
+$("closeSettings").addEventListener(
+    "click",
+    closeSettings
+);
+
+$("cancelSettings").addEventListener(
+    "click",
+    closeSettings
+);
+
+$("saveSettings").addEventListener(
+    "click",
+    ()=>{
+
+        saveSettings();
+        closeSettings();
+
+        toastMessage(
+            "Settings saved."
+        );
+    }
+);
+
+$("clearKeys").addEventListener(
+    "click",
+    ()=>{
+
+        geminiKeyInput.value = "";
+        replicateKeyInput.value = "";
+
+        saveSettings();
+
+        toastMessage(
+            "API keys cleared."
+        );
+    }
+);
+
+$("micBtn").addEventListener(
+    "click",
+    startSpeech
+);
+
+sendBtn.addEventListener(
+    "click",
+    handleSubmit
+);
+
+modelSelect.addEventListener(
+    "change",
+    ()=>{
+
+        localStorage.setItem(
+            STORAGE.MODEL,
+            modelSelect.value
+        );
+
+        const chat = currentChat();
+
+        if(chat){
+            chat.model =
+                modelSelect.value;
+
+            saveChats();
+        }
+    }
+);
+
+input.addEventListener(
+    "input",
+    autoResize
+);
+
+input.addEventListener(
+    "keydown",
+    event=>{
+
+        if(
+            event.key === "Enter" &&
+            !event.shiftKey
+        ){
+
+            event.preventDefault();
+
+            handleSubmit();
+        }
+    }
+);
+
+settingsModal.addEventListener(
+    "click",
+    event=>{
+
+        if(event.target === settingsModal){
+            closeSettings();
+        }
+    }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+loadStorage();
+updatePlaceholder();
+autoResize();
+
+</script>
+
+</body>
+</html>
