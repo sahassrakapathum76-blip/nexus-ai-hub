@@ -4,114 +4,425 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="theme-color" content="#080a0f">
-<meta name="description" content="Nexus AI Ultimate Hub V2">
-<title>Nexus AI Ultimate Hub V2</title>
+<meta name="description" content="Nexus AI Ultimate Hub V4">
+<title>Nexus AI Ultimate Hub V4</title>
 <style>
-:root{--bg:#080a0f;--panel:#11151d;--panel2:#171c26;--panel3:#202634;--border:rgba(255,255,255,.1);--text:#f4f7fb;--muted:#9299a8;--accent:#6c63ff;--accent2:#8d7cff;--danger:#ff5c70;--success:#3ddc97;--shadow:0 15px 50px rgba(0,0,0,.4)}
-*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0}body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans Sinhala",sans-serif;background:radial-gradient(circle at 20% 10%,rgba(108,99,255,.13),transparent 28%),radial-gradient(circle at 90% 90%,rgba(0,183,255,.08),transparent 25%),var(--bg);color:var(--text);overflow:hidden}button,input,textarea,select{font:inherit}button{cursor:pointer}.app{width:100%;height:100%;display:flex}
-.sidebar{width:285px;min-width:285px;height:100%;background:rgba(13,16,22,.97);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:14px;z-index:100;transition:.25s}.brand{display:flex;align-items:center;gap:10px;padding:8px 7px 18px}.brand-logo,.welcome-logo{display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),#00b8ff);box-shadow:0 12px 45px rgba(108,99,255,.3)}.brand-logo{width:38px;height:38px;border-radius:12px;font-size:19px}.brand-text{font-size:16px;font-weight:750}.brand-sub{font-size:11px;color:var(--muted);margin-top:2px}.new-chat{width:100%;border:1px solid var(--border);background:linear-gradient(135deg,#262b39,#1a1f2b);color:#fff;padding:12px 14px;border-radius:12px;display:flex;gap:10px;font-weight:650;margin-bottom:12px}.history-title{display:flex;justify-content:space-between;padding:8px 5px;color:var(--muted);font-size:12px;font-weight:650}.history{flex:1;overflow:auto;padding:4px 0}.history::-webkit-scrollbar,.chat-window::-webkit-scrollbar{width:5px}.history::-webkit-scrollbar-thumb,.chat-window::-webkit-scrollbar-thumb{background:#2c3240;border-radius:20px}.history-empty{text-align:center;color:#666d7c;padding:30px 10px;font-size:12px}.history-item{position:relative;padding:10px 9px;border-radius:11px;margin-bottom:4px;cursor:pointer;border:1px solid transparent}.history-item:hover{background:rgba(255,255,255,.045);border-color:var(--border)}.history-item.active{background:rgba(108,99,255,.12);border-color:rgba(108,99,255,.25)}.history-name{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:62px}.history-meta{margin-top:4px;color:#6f7685;font-size:10px}.history-actions{position:absolute;right:6px;top:7px;display:flex;opacity:0}.history-item:hover .history-actions{opacity:1}.icon-btn{border:0;width:29px;height:29px;display:grid;place-items:center;border-radius:8px;color:#aab1c0;background:transparent}.icon-btn:hover{background:rgba(255,255,255,.09);color:#fff}.sidebar-bottom{border-top:1px solid var(--border);padding-top:12px;display:grid;gap:7px}.side-link{border:1px solid var(--border);border-radius:10px;padding:9px 10px;font-size:12px;display:flex;align-items:center;gap:9px;color:#e8ebf2;background:#171b24;text-decoration:none}.side-link:hover{background:#202531}
-.main{min-width:0;flex:1;height:100%;display:flex;flex-direction:column}.topbar{height:64px;min-height:64px;border-bottom:1px solid var(--border);background:rgba(10,12,17,.75);backdrop-filter:blur(18px);display:flex;align-items:center;gap:10px;padding:0 18px;z-index:20}.mobile-menu{display:none}.model-select{color:#fff;background:#151923;border:1px solid var(--border);border-radius:10px;padding:9px 32px 9px 11px;outline:none;min-width:205px}.topbar-spacer{flex:1}.top-icon{width:37px;height:37px;border-radius:10px;border:1px solid var(--border);background:#151923;color:#dce0e8;display:grid;place-items:center}.top-icon:hover{background:#202532}
-.chat-window{flex:1;overflow-y:auto;padding:28px 18px 180px;scroll-behavior:smooth}.chat-container{width:min(900px,100%);margin:auto}.welcome{min-height:55vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}.welcome-logo{width:68px;height:68px;border-radius:22px;font-size:30px;margin-bottom:20px}.welcome h1{font-size:30px;margin:0 0 8px}.welcome p{color:var(--muted);max-width:580px;line-height:1.6;margin:0}.quick-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;width:min(600px,100%);margin-top:25px}.quick{text-align:left;color:#dce1ea;background:#12161e;border:1px solid var(--border);padding:12px;border-radius:12px}.disclaimer{margin:0 auto 18px;width:min(760px,100%);padding:10px 13px;border:1px solid rgba(255,193,7,.18);background:rgba(255,193,7,.05);color:#b9bec9;border-radius:10px;font-size:11px;text-align:center}.message-row{display:flex;margin:18px 0;gap:11px}.message-row.user{justify-content:flex-end}.avatar{width:34px;min-width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:#202532;font-size:14px}.message-row.user .avatar{background:linear-gradient(135deg,var(--accent),#00a9ff);order:2}.message{max-width:min(760px,88%);line-height:1.7;font-size:14px}.user .message{background:#252b38;border:1px solid var(--border);padding:10px 13px;border-radius:16px;border-top-right-radius:5px}.ai .message{padding:2px 0}.message img,.message video,.message audio{display:block;max-width:100%;border-radius:13px;margin-top:12px}.message img{background:#0c1017;min-height:120px}.message pre{overflow:auto;background:#090c11;border:1px solid var(--border);border-radius:12px;padding:13px;white-space:pre-wrap}.message code{background:#171b24;border-radius:5px;padding:2px 5px}.message-actions{display:flex;gap:4px;margin-top:7px}.message-actions button{border:0;background:transparent;color:#737b8a;font-size:11px;padding:5px 7px;border-radius:7px}.typing{display:flex;align-items:center;gap:5px;padding:8px 0}.dot{width:6px;height:6px;border-radius:50%;background:#8f97a6;animation:bounce 1s infinite alternate}.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}@keyframes bounce{from{transform:translateY(0);opacity:.4}to{transform:translateY(-5px);opacity:1}}
-.composer-area{position:absolute;bottom:0;left:285px;right:0;padding:15px 18px 20px;background:linear-gradient(transparent,var(--bg) 28%);pointer-events:none}.composer{pointer-events:auto;width:min(900px,100%);margin:auto}.mode-bar{display:flex;justify-content:center;gap:5px;margin-bottom:8px}.mode{border:1px solid var(--border);background:#12161e;color:#9ba2b0;border-radius:9px;padding:7px 11px;font-size:11px}.mode.active{color:#fff;background:#252a3a;border-color:rgba(108,99,255,.45)}.input-box{display:flex;align-items:flex-end;gap:7px;background:#151923;border:1px solid rgba(255,255,255,.12);border-radius:17px;padding:8px;box-shadow:var(--shadow)}#user-input{flex:1;min-width:0;max-height:150px;resize:none;border:0;outline:0;color:#fff;background:transparent;padding:9px 7px;line-height:1.5}#user-input::placeholder{color:#6f7684}.send-btn{width:42px;height:42px;border:0;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:grid;place-items:center}.tool-btn{width:40px;height:40px;border:0;background:transparent;color:#9198a7;border-radius:11px;display:grid;place-items:center}.composer-note{text-align:center;color:#5f6674;font-size:9px;margin-top:7px}
-.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.68);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:1000;padding:15px}.modal-backdrop.show{display:flex}.modal{width:min(600px,100%);max-height:92vh;overflow:auto;background:#11151d;border:1px solid var(--border);border-radius:20px;box-shadow:0 30px 100px rgba(0,0,0,.6)}.modal-head{display:flex;justify-content:space-between;align-items:center;padding:18px;border-bottom:1px solid var(--border)}.modal-head h2{margin:0;font-size:17px}.modal-body{padding:18px}.form-group{margin-bottom:14px}.form-group label{display:block;color:#b8bec9;font-size:12px;margin-bottom:6px}.form-control{width:100%;color:#fff;background:#090c12;border:1px solid var(--border);border-radius:10px;padding:11px;outline:none}.form-control:focus{border-color:rgba(108,99,255,.6)}.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.modal-footer{display:flex;justify-content:flex-end;gap:8px;padding:15px 18px;border-top:1px solid var(--border)}.btn{border:0;border-radius:10px;padding:10px 14px;color:#fff;background:#242a35}.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2))}.btn.danger{background:rgba(255,92,112,.12);color:#ff8393}.help-note{padding:11px;border-radius:10px;background:rgba(255,193,7,.05);border:1px solid rgba(255,193,7,.12);color:#aeb4bf;font-size:11px;line-height:1.6}.toast{position:fixed;right:20px;bottom:20px;z-index:2000;padding:11px 15px;border-radius:11px;background:#1d222d;border:1px solid var(--border);box-shadow:var(--shadow);font-size:12px;transform:translateY(20px);opacity:0;pointer-events:none;transition:.25s}.toast.show{transform:translateY(0);opacity:1}.overlay{display:none}
-@media(max-width:760px){.sidebar{position:fixed;left:0;top:0;bottom:0;transform:translateX(-105%);box-shadow:20px 0 60px rgba(0,0,0,.45)}.sidebar.open{transform:translateX(0)}.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:90}.overlay.show{display:block}.mobile-menu{display:grid}.composer-area{left:0}.topbar{padding:0 10px}.model-select{min-width:0;max-width:180px}.chat-window{padding-left:12px;padding-right:12px}.quick-actions{grid-template-columns:1fr}.welcome h1{font-size:24px}.mode{padding:7px 8px}.mode span{display:none}.message{max-width:91%}.settings-grid{grid-template-columns:1fr}}
+:root{
+ --bg:#080a0f;--panel:#10131a;--panel2:#151923;--panel3:#1b202b;
+ --border:rgba(255,255,255,.09);--text:#f4f7fb;--muted:#9299a8;
+ --accent:#6c63ff;--accent2:#8d7cff;--danger:#ff5c70;--success:#3ddc97;
+ --shadow:0 15px 50px rgba(0,0,0,.35);--radius:16px;
+}
+*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0}
+body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans Sinhala",sans-serif;
+background:radial-gradient(circle at 20% 10%,rgba(108,99,255,.13),transparent 28%),radial-gradient(circle at 90% 90%,rgba(0,183,255,.08),transparent 25%),var(--bg);color:var(--text);overflow:hidden}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+.app{width:100%;height:100%;display:flex}
+.sidebar{width:285px;min-width:285px;height:100%;background:rgba(13,16,22,.96);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:14px;z-index:100;transition:.25s ease}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 7px 18px}
+.brand-logo,.welcome-logo{display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),#00b8ff);box-shadow:0 8px 30px rgba(108,99,255,.3)}
+.brand-logo{width:38px;height:38px;border-radius:12px;font-size:19px}.brand-text{font-size:16px;font-weight:750}.brand-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.new-chat{width:100%;border:1px solid var(--border);background:linear-gradient(135deg,#262b39,#1a1f2b);color:white;padding:12px 14px;border-radius:12px;display:flex;align-items:center;gap:10px;font-weight:650;margin-bottom:12px}
+.new-chat:hover{border-color:rgba(141,124,255,.5);background:#242a37}
+.history-title{display:flex;justify-content:space-between;align-items:center;padding:8px 5px;color:var(--muted);font-size:12px;font-weight:650}
+.history{flex:1;overflow:auto;padding:4px 0}.history::-webkit-scrollbar,.chat-window::-webkit-scrollbar{width:5px}
+.history::-webkit-scrollbar-thumb,.chat-window::-webkit-scrollbar-thumb{background:#2c3240;border-radius:20px}
+.history-empty{color:#666d7c;text-align:center;padding:30px 10px;font-size:12px}
+.history-item{position:relative;padding:10px 9px;border-radius:11px;margin-bottom:4px;cursor:pointer;border:1px solid transparent}
+.history-item:hover{background:rgba(255,255,255,.045);border-color:var(--border)}.history-item.active{background:rgba(108,99,255,.12);border-color:rgba(108,99,255,.25)}
+.history-name{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:62px}.history-meta{margin-top:4px;color:#6f7685;font-size:10px}
+.history-actions{position:absolute;right:6px;top:7px;display:flex;gap:2px;opacity:0}.history-item:hover .history-actions{opacity:1}
+.icon-btn{border:0;width:29px;height:29px;display:grid;place-items:center;border-radius:8px;color:#aab1c0;background:transparent}.icon-btn:hover{background:rgba(255,255,255,.09);color:white}
+.sidebar-bottom{border-top:1px solid var(--border);padding-top:12px;display:grid;gap:7px}
+.side-link{text-decoration:none;color:#e8ebf2;background:#171b24;border:1px solid var(--border);border-radius:10px;padding:9px 10px;font-size:12px;display:flex;align-items:center;gap:9px}
+.main{min-width:0;flex:1;height:100%;display:flex;flex-direction:column}.topbar{height:64px;min-height:64px;border-bottom:1px solid var(--border);background:rgba(10,12,17,.72);backdrop-filter:blur(18px);display:flex;align-items:center;gap:10px;padding:0 18px;z-index:20}
+.mobile-menu{display:none}.model-wrap{display:flex;align-items:center;gap:8px}.model-select{color:white;background:#151923;border:1px solid var(--border);border-radius:10px;padding:9px 32px 9px 11px;outline:none;min-width:205px}
+.topbar-spacer{flex:1}.top-icon{width:37px;height:37px;border-radius:10px;border:1px solid var(--border);background:#151923;color:#dce0e8;display:grid;place-items:center}
+.chat-window{flex:1;overflow-y:auto;padding:28px 18px 185px;scroll-behavior:smooth}.chat-container{width:min(900px,100%);margin:auto}
+.welcome{min-height:55vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+.welcome-logo{width:68px;height:68px;border-radius:22px;font-size:30px;margin-bottom:20px}.welcome h1{font-size:30px;margin:0 0 8px}.welcome p{color:var(--muted);max-width:580px;line-height:1.6;margin:0}
+.quick-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;width:min(600px,100%);margin-top:25px}.quick{text-align:left;color:#dce1ea;background:#12161e;border:1px solid var(--border);padding:12px;border-radius:12px}
+.disclaimer{margin:0 auto 18px;width:min(760px,100%);padding:10px 13px;border:1px solid rgba(255,193,7,.18);background:rgba(255,193,7,.05);color:#b9bec9;border-radius:10px;font-size:11px;text-align:center}
+.message-row{display:flex;margin:18px 0;gap:11px}.message-row.user{justify-content:flex-end}.avatar{width:34px;min-width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:#202532;font-size:14px}
+.message-row.user .avatar{background:linear-gradient(135deg,var(--accent),#00a9ff);order:2}.message{max-width:min(760px,88%);line-height:1.7;font-size:14px}.user .message{background:#252b38;border:1px solid var(--border);padding:10px 13px;border-radius:16px;border-top-right-radius:5px}.ai .message{padding:2px 0}
+.message img,.message video,.message audio{display:block;max-width:100%;border-radius:13px;margin-top:12px}.message img{max-height:720px;object-fit:contain;background:#0c1017}.media-error{margin-top:12px;padding:18px;border:1px solid rgba(255,92,112,.25);background:rgba(255,92,112,.07);border-radius:13px;color:#ff9aa8;font-size:12px}.message pre{overflow:auto;background:#090c11;border:1px solid var(--border);border-radius:12px;padding:13px;white-space:pre-wrap}.message code{background:#171b24;border-radius:5px;padding:2px 5px}
+.message-actions{display:flex;gap:4px;margin-top:7px}.message-actions button{border:0;background:transparent;color:#737b8a;font-size:11px;padding:5px 7px;border-radius:7px}.typing{display:flex;align-items:center;gap:5px;padding:8px 0}
+.dot{width:6px;height:6px;border-radius:50%;background:#8f97a6;animation:bounce 1s infinite alternate}.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+@keyframes bounce{from{transform:translateY(0);opacity:.4}to{transform:translateY(-5px);opacity:1}}
+.composer-area{position:absolute;bottom:0;left:285px;right:0;padding:15px 18px 20px;background:linear-gradient(transparent,var(--bg) 28%);pointer-events:none}.composer{pointer-events:auto;width:min(900px,100%);margin:auto}
+.mode-bar{display:flex;justify-content:center;gap:5px;margin-bottom:8px}.mode{border:1px solid var(--border);background:#12161e;color:#9ba2b0;border-radius:9px;padding:7px 11px;font-size:11px}.mode.active{color:white;background:#252a3a;border-color:rgba(108,99,255,.45)}
+.input-box{display:flex;align-items:flex-end;gap:7px;background:#151923;border:1px solid rgba(255,255,255,.12);border-radius:17px;padding:8px;box-shadow:var(--shadow)}#user-input{flex:1;min-width:0;max-height:150px;resize:none;border:0;outline:0;color:white;background:transparent;padding:9px 7px;line-height:1.5}
+.send-btn{width:42px;height:42px;border:0;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;display:grid;place-items:center}.tool-btn{width:40px;height:40px;border:0;background:transparent;color:#9198a7;border-radius:11px;display:grid;place-items:center}.composer-note{text-align:center;color:#5f6674;font-size:9px;margin-top:7px}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:1000;padding:15px}.modal-backdrop.show{display:flex}
+.modal{width:min(620px,100%);max-height:90vh;overflow:auto;background:#11151d;border:1px solid var(--border);border-radius:20px;box-shadow:0 30px 100px rgba(0,0,0,.6)}.modal-head{display:flex;justify-content:space-between;align-items:center;padding:18px;border-bottom:1px solid var(--border)}.modal-head h2{margin:0;font-size:17px}.modal-body{padding:18px}
+.form-group{margin-bottom:15px}.form-group label{display:block;color:#b8bec9;font-size:12px;margin-bottom:6px}.form-control{width:100%;color:white;background:#090c12;border:1px solid var(--border);border-radius:10px;padding:11px;outline:none}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modal-footer{display:flex;justify-content:flex-end;gap:8px;padding:15px 18px;border-top:1px solid var(--border)}.btn{border:0;border-radius:10px;padding:10px 14px;color:white;background:#242a35}.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2))}.btn.danger{background:rgba(255,92,112,.12);color:#ff8393}
+.toast{position:fixed;right:20px;bottom:20px;z-index:2000;padding:11px 15px;border-radius:11px;background:#1d222d;border:1px solid var(--border);box-shadow:var(--shadow);font-size:12px;transform:translateY(20px);opacity:0;pointer-events:none;transition:.25s}.toast.show{transform:translateY(0);opacity:1}
+.overlay{display:none}
+@media(max-width:760px){
+ .sidebar{position:fixed;left:0;top:0;bottom:0;transform:translateX(-105%);box-shadow:20px 0 60px rgba(0,0,0,.45)}.sidebar.open{transform:translateX(0)}
+ .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:90}.overlay.show{display:block}.mobile-menu{display:grid}.composer-area{left:0}.topbar{padding:0 10px}.model-select{min-width:0;max-width:180px}.chat-window{padding-left:12px;padding-right:12px}.quick-actions{grid-template-columns:1fr}.welcome h1{font-size:24px}.mode span{display:none}.message{max-width:91%}.form-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 <div class="app">
 <aside class="sidebar" id="sidebar">
-<div class="brand"><div class="brand-logo">✦</div><div><div class="brand-text">Nexus AI</div><div class="brand-sub">Ultimate Hub V2</div></div></div>
-<button class="new-chat" id="newChatBtn">＋ <span>නව චැට් එකක්</span></button>
-<div class="history-title"><span>චැට් ඉතිහාසය</span><span id="chatCount">0</span></div>
-<div class="history" id="history"></div>
-<div class="sidebar-bottom">
-<a class="side-link" href="https://www.facebook.com/profile.php?id=61555194027157&mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer">📘 Facebook</a>
-<a class="side-link" href="https://mobile.capcutshare.com/sv2/ZSVAUVK3o/" target="_blank" rel="noopener noreferrer">✨ CapCut Profile</a>
-<button class="side-link" id="settingsBtn">⚙️ API & Model Settings</button>
-</div>
+ <div class="brand"><div class="brand-logo">✦</div><div><div class="brand-text">Nexus AI</div><div class="brand-sub">Ultimate Hub V4</div></div></div>
+ <button class="new-chat" id="newChatBtn">＋ <span>නව චැට් එකක්</span></button>
+ <div class="history-title"><span>චැට් ඉතිහාසය</span><span id="chatCount">0</span></div>
+ <div class="history" id="history"></div>
+ <div class="sidebar-bottom">
+  <a class="side-link" href="https://www.facebook.com/profile.php?id=61555194027157&mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer">📘 Facebook</a>
+  <a class="side-link" href="https://mobile.capcutshare.com/sv2/ZSVAUVK3o/" target="_blank" rel="noopener noreferrer">✨ CapCut Profile</a>
+  <button class="side-link" id="settingsBtn">⚙️ API Settings</button>
+ </div>
 </aside>
 <div class="overlay" id="overlay"></div>
 <main class="main">
-<header class="topbar">
-<button class="top-icon mobile-menu" id="menuBtn">☰</button>
-<select id="modelSelect" class="model-select" title="Gemini Chat Model">
-<option value="gemini-3.6-flash">Gemini 3.6 Flash</option>
-<option value="gemini-3.5-flash">Gemini 3.5 Flash</option>
-<option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
-</select>
-<div class="topbar-spacer"></div>
-<button class="top-icon" id="newTopBtn" title="New Chat">＋</button>
-<button class="top-icon" id="settingsTopBtn" title="Settings">⚙</button>
-</header>
-<section class="chat-window" id="chatWindow"><div class="chat-container" id="chatContainer"></div></section>
-<div class="composer-area"><div class="composer">
-<div class="mode-bar">
-<button class="mode active" data-mode="chat">💬 <span>Chat</span></button>
-<button class="mode" data-mode="image">🖼️ <span>Image</span></button>
-<button class="mode" data-mode="video">🎬 <span>Video</span></button>
-<button class="mode" data-mode="music">🎵 <span>Music</span></button>
-</div>
-<div class="input-box"><button class="tool-btn" id="micBtn" title="Voice input">🎤</button><textarea id="user-input" rows="1" placeholder="ඔබට අවශ්‍ය දෙයක් අහන්න..."></textarea><button class="send-btn" id="sendBtn" title="Send">➤</button></div>
-<div class="composer-note">Nexus AI can make mistakes. Check important information.</div>
-</div></div>
-</main></div>
+ <header class="topbar">
+  <button class="top-icon mobile-menu" id="menuBtn">☰</button>
+  <div class="model-wrap">
+   <select id="modelSelect" class="model-select">
+    <option value="gemini-3.6-flash">Gemini 3.6 Flash</option>
+    <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite</option>
+   </select>
+  </div>
+  <div class="topbar-spacer"></div>
+  <button class="top-icon" id="newTopBtn" title="New Chat">＋</button>
+  <button class="top-icon" id="settingsTopBtn" title="Settings">⚙</button>
+ </header>
 
-<div class="modal-backdrop" id="settingsModal"><div class="modal">
-<div class="modal-head"><h2>⚙️ Nexus AI Settings</h2><button class="icon-btn" id="closeSettings">✕</button></div>
-<div class="modal-body">
-<div class="form-group"><label>Gemini API Key</label><input id="geminiKey" class="form-control" type="password" autocomplete="off" placeholder="AIza..."></div>
-<div class="form-group"><label>Pollinations API Key</label><input id="pollinationsKey" class="form-control" type="password" autocomplete="off" placeholder="pk_... / temporary key"></div>
-<div class="settings-grid">
-<div class="form-group"><label>Image Model</label><select id="imageModel" class="form-control"><option value="gptimage-large">GPT Image 1.5 — High Quality</option><option value="nanobanana-pro">NanoBanana Pro — Realistic/Edit</option><option value="seedream5-pro">Seedream 5 Pro — Photorealistic</option><option value="ideogram-v4-quality">Ideogram 4 Quality — Text</option><option value="flux">FLUX — Fast</option></select></div>
-<div class="form-group"><label>Image Quality</label><select id="imageQuality" class="form-control"><option value="high">High</option><option value="medium">Medium</option><option value="low">Fast</option></select></div>
+ <section class="chat-window" id="chatWindow"><div class="chat-container" id="chatContainer"></div></section>
+
+ <div class="composer-area"><div class="composer">
+  <div class="mode-bar">
+   <button class="mode active" data-mode="chat">💬 <span>Chat</span></button>
+   <button class="mode" data-mode="image">🖼️ <span>Image</span></button>
+   <button class="mode" data-mode="video">🎬 <span>Video</span></button>
+   <button class="mode" data-mode="music">🎵 <span>Music</span></button>
+  </div>
+  <div class="input-box">
+   <button class="tool-btn" id="micBtn" title="Voice input">🎤</button>
+   <textarea id="user-input" rows="1" placeholder="ඔබට අවශ්‍ය දෙයක් අහන්න..."></textarea>
+   <button class="send-btn" id="sendBtn" title="Send">➤</button>
+  </div>
+  <div class="composer-note">Nexus AI can make mistakes. Check important information.</div>
+ </div></div>
+</main>
 </div>
-<div class="settings-grid">
-<div class="form-group"><label>Image Size</label><select id="imageSize" class="form-control"><option value="1024x1024">Square 1:1</option><option value="1024x1536">Portrait 2:3</option><option value="1536x1024">Landscape 3:2</option><option value="1024x1792">Portrait 9:16</option><option value="1792x1024">Landscape 16:9</option></select></div>
-<div class="form-group"><label>Video Model</label><select id="videoModel" class="form-control"><option value="veo">Veo — Quality</option><option value="veo-1080p">Veo 1080p — High Quality</option><option value="seedance-pro">Seedance Pro</option><option value="seedance-2.0">Seedance 2.0</option><option value="wan-pro">Wan Pro</option><option value="wan-pro-1080p">Wan Pro 1080p</option><option value="grok-video-pro">Grok Video Pro</option></select></div>
+
+<div class="modal-backdrop" id="settingsModal">
+ <div class="modal">
+  <div class="modal-head"><h2>⚙️ Nexus AI Settings</h2><button class="icon-btn" id="closeSettings">✕</button></div>
+  <div class="modal-body">
+   <div class="form-group"><label>Gemini API Key</label><input id="geminiKey" class="form-control" type="password" placeholder="AIza..."></div>
+   <div class="form-group"><label>Pollinations API Key</label><input id="pollinationsKey" class="form-control" type="password" placeholder="pk_... / sk_..."></div>
+   <div class="form-group"><label>Image Model</label><select id="imageModel" class="form-control">
+    <option value="gpt-image-2">GPT Image 2</option><option value="gptimage-large">GPT Image 1.5 Large</option>
+    <option value="nanobanana-pro">NanoBanana Pro</option><option value="seedream5-pro">Seedream 5 Pro</option>
+    <option value="ideogram-v4-quality">Ideogram V4 Quality</option><option value="flux">FLUX</option>
+   </select></div>
+   <div class="form-grid">
+    <div class="form-group"><label>Image Quality</label><select id="imageQuality" class="form-control"><option value="high">High</option><option value="medium">Medium</option><option value="low">Fast</option></select></div>
+    <div class="form-group"><label>Image Ratio</label><select id="imageRatio" class="form-control"><option value="2:3">Portrait 2:3</option><option value="1:1">Square 1:1</option><option value="3:2">Landscape 3:2</option><option value="9:16">Vertical 9:16</option><option value="16:9">Widescreen 16:9</option></select></div>
+   </div>
+   <div class="form-group"><label>Video Model</label><select id="videoModel" class="form-control">
+    <option value="veo">Veo</option><option value="veo-1080p">Veo 1080p</option><option value="seedance-2.0">Seedance 2.0</option><option value="wan-pro-1080p">Wan Pro 1080p</option><option value="grok-video-pro">Grok Video Pro</option><option value="ltx-2">LTX 2</option>
+   </select></div>
+   <div class="form-grid">
+    <div class="form-group"><label>Video Duration</label><select id="videoDuration" class="form-control"><option value="4">4 sec</option><option value="5">5 sec</option><option value="6">6 sec</option><option value="8">8 sec</option><option value="10">10 sec</option></select></div>
+    <div class="form-group"><label>Video Ratio</label><select id="videoRatio" class="form-control"><option value="9:16">9:16</option><option value="16:9">16:9</option><option value="1:1">1:1</option></select></div>
+   </div>
+   <div class="form-group"><label>Music Model</label><select id="musicModel" class="form-control">
+    <option value="elevenmusic">Eleven Music</option><option value="acestep">ACE-Step</option><option value="stable-audio-3-large">Stable Audio 3 Large</option>
+   </select></div>
+   <div style="padding:11px;border-radius:10px;background:rgba(255,193,7,.05);border:1px solid rgba(255,193,7,.12);color:#aeb4bf;font-size:11px;line-height:1.6">
+    ⚠️ Keys browser LocalStorage තුළ save වේ. Public GitHub source එකට secret keys hard-code කරන්න එපා. Pollinations සඳහා frontend/BYOP key එකක් භාවිතා කිරීම වඩා ආරක්ෂිතයි.
+   </div>
+  </div>
+  <div class="modal-footer"><button class="btn danger" id="clearKeys">Clear Keys</button><button class="btn" id="cancelSettings">Cancel</button><button class="btn primary" id="saveSettings">Save Settings</button></div>
+ </div>
 </div>
-<div class="settings-grid">
-<div class="form-group"><label>Video Duration</label><select id="videoDuration" class="form-control"><option value="4">4 seconds</option><option value="5">5 seconds</option><option value="6">6 seconds</option><option value="8">8 seconds</option><option value="10">10 seconds</option></select></div>
-<div class="form-group"><label>Music Model</label><select id="musicModel" class="form-control"><option value="acestep">ACE-Step — Music</option><option value="elevenmusic">Eleven Music</option><option value="stable-audio-3-large">Stable Audio 3 Large</option><option value="stable-audio-3-medium">Stable Audio 3 Medium</option></select></div>
-</div>
-<div class="help-note">⚠️ Gemini 3.6 Flash is used for Chat. Image generation is handled by a dedicated image model, because Gemini 3.6 Flash is not an image-generation model. For a public GitHub site, use a client-safe/user-authorized Pollinations key flow; never hard-code secret keys in this file.</div>
-</div>
-<div class="modal-footer"><button class="btn danger" id="clearKeys">Clear Keys</button><button class="btn" id="cancelSettings">Cancel</button><button class="btn primary" id="saveSettingsBtn">Save Settings</button></div>
-</div></div>
 <div class="toast" id="toast"></div>
 
 <script>
 "use strict";
-const STORAGE={CHATS:"nexus_ai_chats_v4",CURRENT:"nexus_ai_current_v4",SETTINGS:"nexus_ai_settings_v4",MODEL:"nexus_ai_model_v4"};
-const LEGACY={CHATS:["nexus_ai_chats_v3","nexus_ai_chats_v2"],CURRENT:["nexus_ai_current_v3","nexus_ai_current_v2"],SETTINGS:["nexus_ai_settings_v3","nexus_ai_settings_v2"],MODEL:["nexus_ai_model_v3","nexus_ai_model_v2"]};
-const DEFAULT_MODEL="gemini-3.6-flash";
-const VALID_MODELS=["gemini-3.6-flash","gemini-3.5-flash","gemini-2.5-pro"];
-const DEFAULT_SETTINGS={geminiKey:"",pollinationsKey:"",imageModel:"gptimage-large",imageQuality:"high",imageSize:"1024x1536",videoModel:"veo",videoDuration:"5",musicModel:"acestep"};
+
+const STORAGE={
+ CHATS:"nexus_ai_chats_v3",
+ CURRENT:"nexus_ai_current_v3",
+ SETTINGS:"nexus_ai_settings_v3",
+ MODEL:"nexus_ai_model_v3"
+};
+const DEFAULT_SETTINGS={
+ geminiKey:"",pollinationsKey:"",
+ imageModel:"gpt-image-2",imageQuality:"high",imageRatio:"2:3",
+ videoModel:"veo",videoDuration:"6",videoRatio:"9:16",
+ musicModel:"elevenmusic"
+};
+const OLD_MODEL_MAP={
+ "gemini-2.5-flash":"gemini-3.6-flash",
+ "gemini-2.5-pro":"gemini-3.6-flash",
+ "gemini-3.5-flash":"gemini-3.6-flash"
+};
 let chats=[],currentChatId=null,currentMode="chat",isGenerating=false,abortController=null;
+
 const $=id=>document.getElementById(id);
-const sidebar=$("sidebar"),overlay=$("overlay"),historyEl=$("history"),chatCount=$("chatCount"),chatContainer=$("chatContainer"),chatWindow=$("chatWindow"),input=$("user-input"),sendBtn=$("sendBtn"),modelSelect=$("modelSelect"),toast=$("toast");
-const settingsModal=$("settingsModal"),geminiKeyInput=$("geminiKey"),pollinationsKeyInput=$("pollinationsKey"),imageModelInput=$("imageModel"),imageQualityInput=$("imageQuality"),imageSizeInput=$("imageSize"),videoModelInput=$("videoModel"),videoDurationInput=$("videoDuration"),musicModelInput=$("musicModel");
+const sidebar=$("sidebar"),overlay=$("overlay"),historyEl=$("history"),chatCount=$("chatCount");
+const chatContainer=$("chatContainer"),chatWindow=$("chatWindow"),input=$("user-input"),sendBtn=$("sendBtn"),modelSelect=$("modelSelect"),toast=$("toast");
+const settingsModal=$("settingsModal"),geminiKeyInput=$("geminiKey"),pollinationsKeyInput=$("pollinationsKey");
+const imageModelInput=$("imageModel"),imageQualityInput=$("imageQuality"),imageRatioInput=$("imageRatio");
+const videoModelInput=$("videoModel"),videoDurationInput=$("videoDuration"),videoRatioInput=$("videoRatio"),musicModelInput=$("musicModel");
+
+function cleanKey(value){
+ let s=String(value??"").trim();
+ if((s.startsWith('"')&&s.endsWith('"'))||(s.startsWith("'")&&s.endsWith("'")))s=s.slice(1,-1).trim();
+ s=s.replace(/\s+/g,"");
+ return s;
+}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
-function escapeHTML(value){return String(value??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
-function cleanSecret(value){return String(value??"").trim().replace(/^['\"]+|['\"]+$/g,"").trim()}
-function toastMessage(message){toast.textContent=message;toast.classList.add("show");clearTimeout(toast._timer);toast._timer=setTimeout(()=>toast.classList.remove("show"),2800)}
-function safeGet(key,fallback=""){try{return localStorage.getItem(key)??fallback}catch{return fallback}}
-function safeSet(key,value){try{localStorage.setItem(key,value);return true}catch{return false}}
-function saveChats(){safeSet(STORAGE.CHATS,JSON.stringify(chats))}
-function getSettings(){try{const raw=JSON.parse(safeGet(STORAGE.SETTINGS,"{}"));const x={...DEFAULT_SETTINGS,...(raw&&typeof raw==="object"?raw:{})};return{geminiKey:cleanSecret(x.geminiKey),pollinationsKey:cleanSecret(x.pollinationsKey),imageModel:String(x.imageModel||DEFAULT_SETTINGS.imageModel).trim(),imageQuality:String(x.imageQuality||DEFAULT_SETTINGS.imageQuality).trim(),imageSize:String(x.imageSize||DEFAULT_SETTINGS.imageSize).trim(),videoModel:String(x.videoModel||DEFAULT_SETTINGS.videoModel).trim(),videoDuration:String(x.videoDuration||DEFAULT_SETTINGS.videoDuration).trim(),musicModel:String(x.musicModel||DEFAULT_SETTINGS.musicModel).trim()}}catch{return{...DEFAULT_SETTINGS}}}
-function saveSettings(){const x={geminiKey:cleanSecret(geminiKeyInput.value),pollinationsKey:cleanSecret(pollinationsKeyInput.value),imageModel:imageModelInput.value||DEFAULT_SETTINGS.imageModel,imageQuality:imageQualityInput.value||DEFAULT_SETTINGS.imageQuality,imageSize:imageSizeInput.value||DEFAULT_SETTINGS.imageSize,videoModel:videoModelInput.value||DEFAULT_SETTINGS.videoModel,videoDuration:videoDurationInput.value||DEFAULT_SETTINGS.videoDuration,musicModel:musicModelInput.value||DEFAULT_SETTINGS.musicModel};safeSet(STORAGE.SETTINGS,JSON.stringify(x));return x}
-function requireKey(name){const key=cleanSecret(getSettings()[name]);if(!key){openSettings();throw new Error(name==="geminiKey"?"Gemini API Key එක Settings වලට add කරන්න.":"Pollinations API Key එක Settings වලට add කරන්න.")}return key}
-function migrateModelValue(value){return value==="gemini-2.5-flash"?DEFAULT_MODEL:(VALID_MODELS.includes(value)?value:DEFAULT_MODEL)}
+function escapeHTML(v){return String(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function toastMessage(m){toast.textContent=m;toast.classList.add("show");clearTimeout(toast._timer);toast._timer=setTimeout(()=>toast.classList.remove("show"),3000)}
+function saveChats(){localStorage.setItem(STORAGE.CHATS,JSON.stringify(chats))}
+function getSettings(){
+ try{
+  const raw=JSON.parse(localStorage.getItem(STORAGE.SETTINGS)||"{}");
+  return {...DEFAULT_SETTINGS,...raw,geminiKey:cleanKey(raw.geminiKey),pollinationsKey:cleanKey(raw.pollinationsKey)};
+ }catch{return {...DEFAULT_SETTINGS}}
+}
+function saveSettings(){
+ const s={
+  geminiKey:cleanKey(geminiKeyInput.value),
+  pollinationsKey:cleanKey(pollinationsKeyInput.value),
+  imageModel:imageModelInput.value,imageQuality:imageQualityInput.value,imageRatio:imageRatioInput.value,
+  videoModel:videoModelInput.value,videoDuration:videoDurationInput.value,videoRatio:videoRatioInput.value,musicModel:musicModelInput.value
+ };
+ localStorage.setItem(STORAGE.SETTINGS,JSON.stringify(s));
+}
 function formatDate(t){return new Date(t).toLocaleString("si-LK",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"})}
-function currentChat(){return chats.find(c=>c.id===currentChatId)||null}
-function createNewChat(save=true){const chat={id:uid(),title:"නව චැට් එක",pinned:false,createdAt:Date.now(),updatedAt:Date.now(),model:migrateModelValue(modelSelect.value),messages:[]};chats.unshift(chat);currentChatId=chat.id;safeSet(STORAGE.CURRENT,currentChatId);if(save)saveChats();renderHistory();renderCurrentChat();closeSidebar()}
-function updateChat(){const c=currentChat();if(!c)return;c.updatedAt=Date.now();saveChats();renderHistory()}
-function loadChat(id,close=true){if(!chats.some(c=>c.id===id))return;currentChatId=id;safeSet(STORAGE.CURRENT,id);const c=currentChat();modelSelect.value=migrateModelValue(c.model||DEFAULT_MODEL);c.model=modelSelect.value;renderHistory();renderCurrentChat();if(close)closeSidebar()}
-function migrateLegacyStorage(){if(!safeGet(STORAGE.CHATS,"")){for(const k of LEGACY.CHATS){const v=safeGet(k,"");if(v){safeSet(STORAGE.CHATS,v);break}}}if(!safeGet(STORAGE.CURRENT,"")){for(const k of LEGACY.CURRENT){const v=safeGet(k,"");if(v){safeSet(STORAGE.CURRENT,v);break}}}if(!safeGet(STORAGE.SETTINGS,"")){for(const k of LEGACY.SETTINGS){try{const old=JSON.parse(safeGet(k,"{}"));if(old&&typeof old==="object"){safeSet(STORAGE.SETTINGS,JSON.stringify({...DEFAULT_SETTINGS,geminiKey:cleanSecret(old.geminiKey),pollinationsKey:cleanSecret(old.pollinationsKey)}));break}}catch{}}}let oldModel=safeGet(STORAGE.MODEL,"");if(!oldModel){for(const k of LEGACY.MODEL){oldModel=safeGet(k,"");if(oldModel)break}}if(oldModel==="gemini-2.5-flash")oldModel=DEFAULT_MODEL;if(oldModel&&!safeGet(STORAGE.MODEL,""))safeSet(STORAGE.MODEL,migrateModelValue(oldModel))}
-function renderHistory(){historyEl.innerHTML="";const sorted=[...chats].sort((a,b)=>a.pinned!==b.pinned?(a.pinned?-1:1):b.updatedAt-a.updatedAt);chatCount.textContent=String(chats.length);if(!sorted.length){historyEl.innerHTML='<div class="history-empty">තවමත් chat history එකක් නැහැ.</div>';return}for(const chat of sorted){const item=document.createElement("div");item.className="history-item "+(chat.id===currentChatId?"active":"");item.innerHTML=`<div class="history-name">${chat.pinned?"📌 ":""}${escapeHTML(chat.title)}</div><div class="history-meta">${formatDate(chat.updatedAt)}</div><div class="history-actions"><button class="icon-btn pin-btn" title="Pin">${chat.pinned?"📌":"📍"}</button><button class="icon-btn delete-btn" title="Delete">🗑</button></div>`;item.addEventListener("click",()=>loadChat(chat.id));item.querySelector(".pin-btn").addEventListener("click",e=>{e.stopPropagation();chat.pinned=!chat.pinned;saveChats();renderHistory()});item.querySelector(".delete-btn").addEventListener("click",e=>{e.stopPropagation();deleteChat(chat.id)});historyEl.appendChild(item)}}
-function deleteChat(id){const chat=chats.find(c=>c.id===id);if(!chat)return;if(!confirm(`"${chat.title}" chat එක delete කරන්නද?`))return;chats=chats.filter(c=>c.id!==id);if(currentChatId===id){currentChatId=chats[0]?.id||null;if(!currentChatId)createNewChat(false)}safeSet(STORAGE.CURRENT,currentChatId);saveChats();renderHistory();renderCurrentChat()}
-function renderCurrentChat(){const chat=currentChat();chatContainer.innerHTML="";if(!chat||!chat.messages.length){chatContainer.innerHTML=`<div class="welcome"><div class="welcome-logo">✦</div><h1>Nexus AI</h1><p>ඔබේ AI Ultimate Hub V2 එකට සාදරයෙන් පිළිගනිමු. Chat, Image, Video සහ Music tools එකම තැනක.</p><div class="quick-actions"><button class="quick" data-prompt="මට සිංහලෙන් AI ගැන සරලව කියලා දෙන්න.">💡 AI ගැන පැහැදිලි කරන්න</button><button class="quick" data-prompt="Facebook එකට viral Sinhala caption එකක් ලියන්න.">✍️ Facebook Caption</button><button class="quick" data-prompt="Create a cinematic portrait of Sri Lanka at sunset.">🖼️ Image Idea</button><button class="quick" data-prompt="මට 10 second short video එකකට creative idea එකක් දෙන්න.">🎬 Video Idea</button></div></div><div class="disclaimer">⚠️ AI responses වැරදි විය හැක. වැදගත් තොරතුරු verify කරන්න.</div>`;chatContainer.querySelectorAll(".quick").forEach(b=>b.addEventListener("click",()=>{input.value=b.dataset.prompt;autoResize();input.focus()}));return}const frag=document.createDocumentFragment();for(const m of chat.messages)frag.appendChild(createMessageElement(m));chatContainer.appendChild(frag);scrollBottom()}
-function createMessageElement(m){const row=document.createElement("div");row.className="message-row "+(m.role==="user"?"user":"ai");const avatar=document.createElement("div");avatar.className="avatar";avatar.textContent=m.role==="user"?"👤":"✦";const body=document.createElement("div");body.className="message";if(m.type==="image")body.innerHTML=escapeHTML(m.text||"")+`<img src="${escapeHTML(m.url)}" alt="Generated image" loading="lazy">`;else if(m.type==="video")body.innerHTML=escapeHTML(m.text||"")+`<video controls playsinline src="${escapeHTML(m.url)}"></video>`;else if(m.type==="audio")body.innerHTML=escapeHTML(m.text||"")+`<audio controls src="${escapeHTML(m.url)}"></audio>`;else body.innerHTML=renderText(m.text||"");if(m.role==="model"){const actions=document.createElement("div");actions.className="message-actions";const copy=document.createElement("button");copy.textContent="⧉ Copy";copy.onclick=async()=>{try{await navigator.clipboard.writeText(m.text||"");toastMessage("Copied!")}catch{toastMessage("Copy කරන්න බැරි වුණා.")}};actions.appendChild(copy);body.appendChild(actions)}row.append(avatar,body);return row}
-function renderText(text){let s=escapeHTML(text);s=s.replace(/```([\s\S]*?)```/g,"<pre>$1</pre>").replace(/`([^`]+)`/g,"<code>$1</code>").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>");return s}
+
+function migrateStorage(){
+ let changed=false;
+ try{
+  const raw=JSON.parse(localStorage.getItem(STORAGE.CHATS)||"[]");
+  if(Array.isArray(raw)){
+   raw.forEach(c=>{
+    const old=c.model;
+    if(OLD_MODEL_MAP[old]){c.model=OLD_MODEL_MAP[old];changed=true}
+    if(Array.isArray(c.messages))c.messages.forEach(m=>{if(OLD_MODEL_MAP[m.model]){m.model=OLD_MODEL_MAP[m.model];changed=true}});
+   });
+   chats=raw;
+  }
+ }catch{chats=[]}
+ const oldSelected=localStorage.getItem("nexus_ai_model_v2")||localStorage.getItem(STORAGE.MODEL);
+ const migrated=OLD_MODEL_MAP[oldSelected]||oldSelected||"gemini-3.6-flash";
+ modelSelect.value=["gemini-3.6-flash","gemini-3.5-flash-lite"].includes(migrated)?migrated:"gemini-3.6-flash";
+ localStorage.setItem(STORAGE.MODEL,modelSelect.value);
+ if(changed)saveChats();
+ currentChatId=localStorage.getItem(STORAGE.CURRENT);
+}
+function loadStorage(){
+ migrateStorage();
+ renderHistory();
+ if(currentChatId&&chats.some(c=>c.id===currentChatId))loadChat(currentChatId,false);else createNewChat(false);
+}
+function createNewChat(save=true){
+ const chat={id:uid(),title:"නව චැට් එක",pinned:false,createdAt:Date.now(),updatedAt:Date.now(),model:modelSelect.value,messages:[]};
+ chats.unshift(chat);currentChatId=chat.id;localStorage.setItem(STORAGE.CURRENT,currentChatId);
+ if(save)saveChats();renderHistory();renderCurrentChat();closeSidebar();
+}
+function currentChat(){return chats.find(c=>c.id===currentChatId)}
+function loadChat(id,close=true){if(!chats.some(c=>c.id===id))return;currentChatId=id;localStorage.setItem(STORAGE.CURRENT,id);renderHistory();renderCurrentChat();if(close)closeSidebar()}
+function renderHistory(){
+ historyEl.innerHTML="";const sorted=[...chats].sort((a,b)=>a.pinned!==b.pinned?(a.pinned?-1:1):b.updatedAt-a.updatedAt);chatCount.textContent=chats.length;
+ if(!sorted.length){historyEl.innerHTML='<div class="history-empty">තවමත් chat history එකක් නැහැ.</div>';return}
+ sorted.forEach(chat=>{
+  const item=document.createElement("div");item.className="history-item "+(chat.id===currentChatId?"active":"");
+  item.innerHTML=`<div class="history-name">${chat.pinned?"📌 ":""}${escapeHTML(chat.title)}</div><div class="history-meta">${formatDate(chat.updatedAt)}</div><div class="history-actions"><button class="icon-btn pin-btn">${chat.pinned?"📌":"📍"}</button><button class="icon-btn delete-btn">🗑</button></div>`;
+  item.onclick=()=>loadChat(chat.id);
+  item.querySelector(".pin-btn").onclick=e=>{e.stopPropagation();chat.pinned=!chat.pinned;saveChats();renderHistory()};
+  item.querySelector(".delete-btn").onclick=e=>{e.stopPropagation();deleteChat(chat.id)};
+  historyEl.appendChild(item);
+ });
+}
+function deleteChat(id){
+ const c=chats.find(x=>x.id===id);if(!c)return;if(!confirm(`"${c.title}" chat එක delete කරන්නද?`))return;
+ chats=chats.filter(x=>x.id!==id);if(currentChatId===id){currentChatId=chats[0]?.id||null;if(!currentChatId){createNewChat(false);saveChats();return}}
+ localStorage.setItem(STORAGE.CURRENT,currentChatId);saveChats();renderHistory();renderCurrentChat();
+}
+function renderCurrentChat(){
+ const chat=currentChat();chatContainer.innerHTML="";
+ if(!chat||!chat.messages.length){
+  chatContainer.innerHTML=`<div class="welcome"><div class="welcome-logo">✦</div><h1>Nexus AI</h1><p>Chat, high-quality Image, Video සහ Music tools එකම තැනක.</p><div class="quick-actions">
+  <button class="quick" data-prompt="මට සිංහලෙන් AI ගැන සරලව කියලා දෙන්න.">💡 AI ගැන පැහැදිලි කරන්න</button>
+  <button class="quick" data-prompt="Facebook එකට viral Sinhala caption එකක් ලියන්න.">✍️ Facebook Caption</button>
+  <button class="quick" data-prompt="Create a cinematic photorealistic portrait of a Sri Lankan woman at sunset.">🖼️ Image Idea</button>
+  <button class="quick" data-prompt="Create a cinematic 6 second video of a Sri Lankan sunset.">🎬 Video Idea</button></div></div><div class="disclaimer">⚠️ AI responses වැරදි විය හැක. වැදගත් තොරතුරු verify කරන්න.</div>`;
+  chatContainer.querySelectorAll(".quick").forEach(b=>b.onclick=()=>{input.value=b.dataset.prompt;autoResize();input.focus()});return;
+ }
+ const f=document.createDocumentFragment();chat.messages.forEach(m=>f.appendChild(createMessageElement(m)));chatContainer.appendChild(f);scrollBottom();
+}
+function createMessageElement(m){
+ const row=document.createElement("div");row.className="message-row "+(m.role==="user"?"user":"ai");
+ const avatar=document.createElement("div");avatar.className="avatar";avatar.textContent=m.role==="user"?"👤":"✦";
+ const body=document.createElement("div");body.className="message";
+ if(m.type==="image"){
+  body.innerHTML=escapeHTML(m.text||"🖼️ Generated Image");
+  if(m.url){const img=document.createElement("img");img.alt="Generated image";img.loading="lazy";img.src=m.url;img.onerror=()=>{img.replaceWith(mediaError("Image load failed. Retry කරන්න."))};body.appendChild(img)}
+ }else if(m.type==="video"){
+  body.innerHTML=escapeHTML(m.text||"🎬 Generated Video");
+  if(m.url){const v=document.createElement("video");v.controls=true;v.playsInline=true;v.preload="metadata";v.src=m.url;v.onerror=()=>{v.replaceWith(mediaError("Video load failed. Retry කරන්න."))};body.appendChild(v)}
+ }else if(m.type==="audio"){
+  body.innerHTML=escapeHTML(m.text||"🎵 Generated Music");
+  if(m.url){const a=document.createElement("audio");a.controls=true;a.preload="metadata";a.src=m.url;a.onerror=()=>{a.replaceWith(mediaError("Audio load failed. Retry කරන්න."))};body.appendChild(a)}
+ }else body.innerHTML=renderText(m.text||"");
+ if(m.role==="model"){
+  const actions=document.createElement("div");actions.className="message-actions";
+  const copy=document.createElement("button");copy.textContent="⧉ Copy";
+  copy.onclick=async()=>{try{await navigator.clipboard.writeText(m.text||"");toastMessage("Copied!")}catch{toastMessage("Copy කරන්න බැරි වුණා.")}};
+  actions.appendChild(copy);body.appendChild(actions);
+ }
+ row.appendChild(avatar);row.appendChild(body);return row;
+}
+function mediaError(text){const d=document.createElement("div");d.className="media-error";d.textContent="⚠️ "+text;return d}
+function renderText(t){let s=escapeHTML(t);s=s.replace(/```([\s\S]*?)```/g,"<pre>$1</pre>").replace(/`([^`]+)`/g,"<code>$1</code>").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>");return s}
+function scrollBottom(){requestAnimationFrame(()=>chatWindow.scrollTop=chatWindow.scrollHeight)}
+
+function requireKey(kind){
+ const s=getSettings();
+ const key=kind==="gemini"?s.geminiKey:s.pollinationsKey;
+ if(!key){openSettings();throw new Error(kind==="gemini"?"Gemini API Key එක Settings වලට add කරන්න.":"Pollinations API Key එක Settings වලට add කරන්න.")}
+ return key;
+}
+function validateGeminiKey(key){return /^AIza[\w-]{20,}$/.test(key)||key.length>=20}
+function normalizeGeminiContents(messages){
+ const out=[];
+ for(const m of messages){
+  if(m.role!=="user"&&m.role!=="model")continue;
+  const text=String(m.text||"");
+  if(!text)continue;
+  const role=m.role==="model"?"model":"user";
+  if(out.length&&out[out.length-1].role===role){out[out.length-1].parts[0].text += "\n\n"+text;}
+  else out.push({role,parts:[{text}]});
+ }
+ // Gemini 3.x rejects a request ending in a model turn.
+ while(out.length&&out[out.length-1].role==="model")out.pop();
+ return out;
+}
+async function callGemini(){
+ const settings=getSettings();
+ if(!validateGeminiKey(settings.geminiKey)){openSettings();throw new Error("Gemini API Key එක Settings වලට නිවැරදිව add කරලා Save Settings කරන්න.")}
+ const chat=currentChat();
+ const contents=normalizeGeminiContents(chat.messages);
+ if(!contents.length)throw new Error("Gemini වෙත යැවීමට message එකක් නැහැ.");
+ const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelSelect.value)}:generateContent`,{
+  method:"POST",signal:abortController.signal,headers:{"Content-Type":"application/json","x-goog-api-key":settings.geminiKey},
+  body:JSON.stringify({contents,generationConfig:{maxOutputTokens:4096}})
+ });
+ let data={};try{data=await response.json()}catch{}
+ if(!response.ok){
+  const msg=data?.error?.message||data?.error?.status||`HTTP ${response.status}`;
+  if(response.status===400)throw new Error("Gemini request error: "+msg);
+  if(response.status===401||response.status===403)throw new Error("Gemini API Key invalid/unauthorized: "+msg);
+  if(response.status===404)throw new Error("Model එක හමු වුණේ නැහැ: "+modelSelect.value);
+  if(response.status===429)throw new Error("Gemini rate limit/quota exceeded. ටික වේලාවකින් නැවත උත්සාහ කරන්න.");
+  throw new Error(msg);
+ }
+ const parts=data?.candidates?.[0]?.content?.parts||[];
+ const text=parts.map(p=>p.text||"").join("").trim();
+ if(text)return text;
+ const reason=data?.candidates?.[0]?.finishReason;
+ const block=data?.promptFeedback?.blockReason;
+ throw new Error(block?`Gemini request blocked: ${block}`:reason?`Gemini response එක text එකක් ලබා දුන්නේ නැහැ (${reason}).`:"Gemini response එක හිස්. API response එක check කරන්න.");
+}
+function ratioSize(r){
+ const map={"1:1":[1024,1024],"2:3":[1024,1536],"3:2":[1536,1024],"9:16":[1024,1792],"16:9":[1792,1024]};
+ return map[r]||map["2:3"];
+}
+function imagePrompt(p){return `${p}. High-end professional photography, photorealistic, natural realistic human features, realistic skin texture, detailed eyes and hair, detailed clothing fabric, accurate anatomy, cinematic lighting, high dynamic range, sharp focus, depth of field, premium camera quality, ultra detailed, clean composition.`}
+async function pollinationsFetch(path,params,kind){
+ const key=requireKey("pollinations");
+ const url=new URL(`https://gen.pollinations.ai/${path}`);
+ Object.entries({...params,key}).forEach(([k,v])=>url.searchParams.set(k,String(v)));
+ const response=await fetch(url.toString(),{signal:abortController.signal,headers:{Accept:kind==="image"?"image/*":kind==="video"?"video/*":"audio/*"}});
+ if(!response.ok){let detail="";try{const t=await response.text();detail=t.slice(0,300)}catch{};throw new Error(`Pollinations ${kind} error ${response.status}${detail?": "+detail:""}`)}
+ const blob=await response.blob();
+ if(!blob.size)throw new Error(`Pollinations ${kind} response එක හිස්.`);
+ return URL.createObjectURL(blob);
+}
+async function generateImage(prompt){
+ const s=getSettings(),[width,height]=ratioSize(s.imageRatio);
+ return pollinationsFetch(`image/${encodeURIComponent(imagePrompt(prompt))}`,{model:s.imageModel,width,height,quality:s.imageQuality,nologo:"true"},"image");
+}
+async function generateVideo(prompt){
+ const s=getSettings();
+ return pollinationsFetch(`video/${encodeURIComponent(prompt)}`,{model:s.videoModel,duration:s.videoDuration,aspectRatio:s.videoRatio},"video");
+}
+async function generateMusic(prompt){
+ const s=getSettings();
+ return pollinationsFetch(`audio/${encodeURIComponent(prompt)}`,{model:s.musicModel},"audio");
+}
+
+async function handleSubmit(){
+ if(isGenerating){stopGeneration();return}
+ const prompt=input.value.trim();if(!prompt)return;
+ const chat=currentChat();if(!chat){createNewChat();return}
+ if(!chat.messages.length||chat.title==="නව චැට් එක")chat.title=prompt.length>42?prompt.slice(0,42)+"...":prompt;
+ chat.messages.push({id:uid(),role:"user",text:prompt,timestamp:Date.now()});chat.updatedAt=Date.now();chat.model=modelSelect.value;
+ input.value="";autoResize();saveChats();renderHistory();renderCurrentChat();setGenerating(true);
+ try{
+  abortController=new AbortController();
+  if(currentMode==="chat"){
+   const answer=await callGemini();chat.messages.push({id:uid(),role:"model",text:answer,timestamp:Date.now(),model:modelSelect.value});
+  }else if(currentMode==="image"){
+   addTemporaryMessage("🖼️ High-quality image එක generate කරමින් පවතී...");
+   const url=await generateImage(prompt);removeTemporaryMessage();chat.messages.push({id:uid(),role:"model",type:"image",text:"🖼️ Generated Image",url,timestamp:Date.now()});
+  }else if(currentMode==="video"){
+   addTemporaryMessage("🎬 Video එක generate කරමින් පවතී...");const url=await generateVideo(prompt);removeTemporaryMessage();chat.messages.push({id:uid(),role:"model",type:"video",text:"🎬 Generated Video",url,timestamp:Date.now()});
+  }else{
+   addTemporaryMessage("🎵 Music එක generate කරමින් පවතී...");const url=await generateMusic(prompt);removeTemporaryMessage();chat.messages.push({id:uid(),role:"model",type:"audio",text:"🎵 Generated Music",url,timestamp:Date.now()});
+  }
+  chat.updatedAt=Date.now();saveChats();renderHistory();renderCurrentChat();
+ }catch(e){
+  removeTemporaryMessage();if(e.name!=="AbortError"){chat.messages.push({id:uid(),role:"model",text:"❌ Error: "+(e.message||"Unknown error")+"\n\n💡 Settings → API key එක සහ model එක check කරලා Retry කරන්න.",timestamp:Date.now()});saveChats();renderCurrentChat()}
+ }finally{abortController=null;setGenerating(false)}
+}
+function addTemporaryMessage(text){removeTemporaryMessage();const row=document.createElement("div");row.className="message-row ai temporary-message";row.innerHTML=`<div class="avatar">✦</div><div class="message"><div class="typing"><span>${escapeHTML(text)}</span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></div>`;chatContainer.appendChild(row);scrollBottom()}
+function removeTemporaryMessage(){chatContainer.querySelector(".temporary-message")?.remove()}
+function setGenerating(v){isGenerating=v;sendBtn.textContent=v?"■":"➤";sendBtn.title=v?"Stop":"Send"}
+function stopGeneration(){abortController?.abort();setGenerating(false);toastMessage("Generation stopped.")}
+function updatePlaceholder(){input.placeholder={chat:"ඔබට අවශ්‍ය දෙයක් අහන්න...",image:"High-quality image එක විස්තර කරන්න...",video:"වීඩියෝ scene එක විස්තර කරන්න...",music:"Music එක විස්තර කරන්න..."}[currentMode]}
+document.querySelectorAll(".mode").forEach(b=>b.onclick=()=>{document.querySelectorAll(".mode").forEach(x=>x.classList.remove("active"));b.classList.add("active");currentMode=b.dataset.mode;updatePlaceholder()});
+let recognition=null;
+function startSpeech(){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){toastMessage("මෙම browser එක Speech Recognition support කරන්නේ නැහැ.");return}
+ recognition=new SR();recognition.lang="si-LK";recognition.interimResults=true;recognition.continuous=false;recognition.onstart=()=>$("micBtn").textContent="🔴";
+ recognition.onresult=e=>{let t="";for(let i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;input.value=t;autoResize()};recognition.onerror=()=>toastMessage("Voice input එක ලබාගන්න බැරි වුණා.");recognition.onend=()=>$("micBtn").textContent="🎤";recognition.start();
+}
+function autoResize(){input.style.height="auto";input.style.height=Math.min(input.scrollHeight,150)+"px"}
+function openSidebar(){sidebar.classList.add("open");overlay.classList.add("show")}function closeSidebar(){sidebar.classList.remove("open");overlay.classList.remove("show")}
+function openSettings(){
+ const s=getSettings();geminiKeyInput.value=s.geminiKey||"";pollinationsKeyInput.value=s.pollinationsKey||"";
+ imageModelInput.value=s.imageModel||DEFAULT_SETTINGS.imageModel;imageQualityInput.value=s.imageQuality||DEFAULT_SETTINGS.imageQuality;imageRatioInput.value=s.imageRatio||DEFAULT_SETTINGS.imageRatio;
+ videoModelInput.value=s.videoModel||DEFAULT_SETTINGS.videoModel;videoDurationInput.value=s.videoDuration||DEFAULT_SETTINGS.videoDuration;videoRatioInput.value=s.videoRatio||DEFAULT_SETTINGS.videoRatio;musicModelInput.value=s.musicModel||DEFAULT_SETTINGS.musicModel;
+ settingsModal.classList.add("show");
+}
+function closeSettings(){settingsModal.classList.remove("show")}
+
+$("newChatBtn").onclick=()=>createNewChat();$("newTopBtn").onclick=()=>createNewChat();$("menuBtn").onclick=openSidebar;overlay.onclick=closeSidebar;
+$("settingsBtn").onclick=openSettings;$("settingsTopBtn").onclick=openSettings;$("closeSettings").onclick=closeSettings;$("cancelSettings").onclick=closeSettings;
+$("saveSettings").onclick=()=>{saveSettings();closeSettings();toastMessage("Settings saved.");};
+$("clearKeys").onclick=()=>{geminiKeyInput.value="";pollinationsKeyInput.value="";saveSettings();toastMessage("API keys cleared.")};
+$("micBtn").onclick=startSpeech;sendBtn.onclick=handleSubmit;
+modelSelect.onchange=()=>{localStorage.setItem(STORAGE.MODEL,modelSelect.value);const c=currentChat();if(c){c.model=modelSelect.value;saveChats()}};
+input.oninput=autoResize;input.onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();handleSubmit()}};
+settingsModal.onclick=e=>{if(e.target===settingsModal)closeSettings()};
+
+loadStorage();updatePlaceholder();autoResize();
+</script>
+</body>
+</html>function renderText(text){let s=escapeHTML(text);s=s.replace(/```([\s\S]*?)```/g,"<pre>$1</pre>").replace(/`([^`]+)`/g,"<code>$1</code>").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>");return s}
 function scrollBottom(){requestAnimationFrame(()=>chatWindow.scrollTop=chatWindow.scrollHeight)}
 function requireGeminiSettings(){const key=requireKey("geminiKey");return{...getSettings(),geminiKey:key}}
 async function callGemini(){const settings=requireGeminiSettings();const chat=currentChat();if(!chat)throw new Error("Current chat එක හමු වුණේ නැහැ.");const contents=chat.messages.filter(m=>m.role==="user"||m.role==="model").map(m=>({role:m.role,parts:[{text:String(m.text||"")}]}));if(!contents.length)throw new Error("Gemini වෙත යැවීමට message එකක් නැහැ.");if(contents.at(-1)?.role!=="user")throw new Error("Gemini request එක අවසන් user message එකකින් තිබිය යුතුයි.");const model=migrateModelValue(modelSelect.value);const endpoint=`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;abortController=abortController||new AbortController();let response;try{response=await fetch(endpoint,{method:"POST",signal:abortController.signal,headers:{"Content-Type":"application/json","x-goog-api-key":settings.geminiKey},body:JSON.stringify({contents,generationConfig:{maxOutputTokens:2048}})})}catch(e){if(e.name==="AbortError")throw e;throw new Error("Gemini API වෙත සම්බන්ධ වීමට බැරි වුණා. Internet connection එක පරීක්ෂා කරන්න.")}let data={};try{data=await response.json()}catch{throw new Error(`Gemini API එකෙන් valid JSON response එකක් ලැබුණේ නැහැ. HTTP ${response.status}`)}if(!response.ok){const msg=data?.error?.message||`HTTP ${response.status}`;if([400,401,403].includes(response.status))throw new Error("Gemini API Key හෝ request එක invalid. Settings එකේ API Key එක නැවත පරීක්ෂා කරන්න. "+msg);if(response.status===404)throw new Error(`Gemini model "${model}" හමු වුණේ නැහැ. ${msg}`);throw new Error(msg)}const text=data?.candidates?.[0]?.content?.parts?.map(p=>p.text||"").join("")||"";if(!text.trim())throw new Error("Gemini response එක හිස්.");return text}
